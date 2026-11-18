@@ -1,0 +1,428 @@
+{
+  "info": {
+    "_postman_id": "cargotrace-api-v1",
+    "name": "CargoTrace REST API Collection - UAS Web Programming 2",
+    "description": "Complete REST API collection for CargoTrace Global Shipment Visibility & Tracking Platform.\nIncludes Authentication (Sanctum), Shipments CRUD, Tracking Lifecycle Transitions, Incident Exceptions, Carriers, Locations, and Public Telemetry.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "shipment_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "exception_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sarah Logistics Client\",\n  \"email\": \"sarah@importexport.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login (Operator)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "    console.log('Token automatically saved: ' + jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"operator@gmail.com\",\n  \"password\": \"operator123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@gmail.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Authenticated User",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/user",
+              "host": ["{{base_url}}"],
+              "path": ["api", "user"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Shipments",
+      "item": [
+        {
+          "name": "List Shipments (Filtered & Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/shipments?per_page=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "shipments"],
+              "query": [
+                { "key": "per_page", "value": "10" },
+                { "key": "status", "value": "IN_TRANSIT", "disabled": true },
+                { "key": "search", "value": "SEAEUR", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Shipment (Operator/Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": 3,\n  \"carrier_id\": 1,\n  \"origin_id\": 1,\n  \"destination_id\": 4,\n  \"cargo_type\": \"Precision Machinery Components\",\n  \"weight_kg\": 2400.50,\n  \"expected_departure_at\": \"2026-11-20 08:00:00\",\n  \"expected_arrival_at\": \"2026-12-05 18:00:00\",\n  \"items\": [\n    {\n      \"description\": \"CNC Servo Motors Unit A\",\n      \"weight_kg\": 1200,\n      \"quantity\": 12\n    },\n    {\n      \"description\": \"Hydraulic Pressure Pumps\",\n      \"weight_kg\": 1200.5,\n      \"quantity\": 8\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "shipments"]
+            }
+          }
+        },
+        {
+          "name": "Get Shipment Details (with Delay & Weather)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/shipments/{{shipment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "shipments", "{{shipment_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Shipment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cargo_type\": \"High-Grade Precision Machinery\",\n  \"weight_kg\": 2500.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipments/{{shipment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "shipments", "{{shipment_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Shipment (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/shipments/{{shipment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "shipments", "{{shipment_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Tracking & Status Transitions",
+      "item": [
+        {
+          "name": "Get Tracking Timeline",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/shipments/{{shipment_id}}/tracking",
+              "host": ["{{base_url}}"],
+              "path": ["api", "shipments", "{{shipment_id}}", "tracking"]
+            }
+          }
+        },
+        {
+          "name": "Log Tracking Milestone (Status Advance)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"IN_TRANSIT\",\n  \"location_id\": 9,\n  \"description\": \"Container cleared checkpoint and underway.\",\n  \"latitude\": 29.9737,\n  \"longitude\": 32.5599\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipments/{{shipment_id}}/tracking",
+              "host": ["{{base_url}}"],
+              "path": ["api", "shipments", "{{shipment_id}}", "tracking"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Exception Management",
+      "item": [
+        {
+          "name": "List Shipment Exceptions",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/shipments/{{shipment_id}}/exceptions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "shipments", "{{shipment_id}}", "exceptions"]
+            }
+          }
+        },
+        {
+          "name": "Report Incident Exception",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"WEATHER_DELAY\",\n  \"severity\": \"MEDIUM\",\n  \"description\": \"Tropical gale warning. Vessel paused at sea staging anchorage.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipments/{{shipment_id}}/exceptions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "shipments", "{{shipment_id}}", "exceptions"]
+            }
+          }
+        },
+        {
+          "name": "Resolve / Update Exception",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"RESOLVED\",\n  \"notes\": \"Weather cleared. Coast guard advisory lifted. Transit resumed.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/exceptions/{{exception_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "exceptions", "{{exception_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Carriers & Locations",
+      "item": [
+        {
+          "name": "List Carriers",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/carriers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carriers"]
+            }
+          }
+        },
+        {
+          "name": "Create Carrier (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"CMA_CGM\",\n  \"name\": \"CMA CGM Ocean Shipping\",\n  \"contact_info\": \"+33 4 88 91 90 00\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/carriers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "carriers"]
+            }
+          }
+        },
+        {
+          "name": "List Locations",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/locations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "locations"]
+            }
+          }
+        },
+        {
+          "name": "Create Location (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"DXB\",\n  \"name\": \"Jebel Ali Port Terminal\",\n  \"city\": \"Dubai\",\n  \"country\": \"United Arab Emirates\",\n  \"latitude\": 24.9857,\n  \"longitude\": 55.0273\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/locations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "locations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Public Telemetry Portal",
+      "item": [
+        {
+          "name": "Public Track By Shipment Number",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/public/track/CT-20261118-SEAEUR",
+              "host": ["{{base_url}}"],
+              "path": ["api", "public", "track", "CT-20261118-SEAEUR"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
