@@ -87,30 +87,11 @@
             <!-- ======================================================== -->
             <!-- LIQUID ICE & SILVER-SLATE 3D GLOBE HERO EXPERIENCE       -->
             <!-- ======================================================== -->
-            <section class="relative min-h-[90vh] lg:min-h-[92vh] flex flex-col justify-center overflow-hidden bg-gradient-to-b from-[#eaf1f6] via-[#e1ecf3] to-[#d6e5ee] border-b border-white/60">
+            <section class="relative min-h-[90vh] lg:min-h-[92vh] flex flex-col justify-center overflow-hidden bg-[#e8edf1] border-b border-white/60">
                 
-                <!-- Fluid Abstract Wave on the Right (Deep Muted Teal/Slate) -->
-                <div class="absolute right-0 top-0 bottom-0 w-full lg:w-7/12 pointer-events-none overflow-hidden z-0">
-                    <svg class="absolute right-0 top-0 h-full w-full object-cover opacity-90" viewBox="0 0 700 800" fill="none" preserveAspectRatio="none">
-                        <path d="M220,0 C100,180 60,420 160,610 C220,710 320,770 460,800 L700,800 L700,0 Z" fill="url(#tealFluidGradient)" />
-                        <defs>
-                            <linearGradient id="tealFluidGradient" x1="10%" y1="0%" x2="90%" y2="100%">
-                                <stop offset="0%" stop-color="#3c657a" />
-                                <stop offset="45%" stop-color="#284858" />
-                                <stop offset="100%" stop-color="#16303d" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <!-- Soft Ambient Highlights -->
-                    <div class="absolute right-1/4 top-1/4 w-96 h-96 bg-white/15 rounded-full blur-3xl"></div>
-                    <div class="absolute right-10 bottom-10 w-72 h-72 bg-sky-200/20 rounded-full blur-2xl"></div>
-                </div>
-
-                <!-- Soft Flowing Ice Wave on the Bottom-Left -->
-                <div class="absolute left-0 bottom-0 w-full lg:w-3/5 h-48 pointer-events-none z-0">
-                    <svg class="w-full h-full opacity-60" viewBox="0 0 700 200" fill="none" preserveAspectRatio="none">
-                        <path d="M0,120 C180,60 360,180 700,90 L700,200 L0,200 Z" fill="#ffffff" />
-                    </svg>
+                <!-- Authentic Frosted Ice & Slate Swirl Background Image (from Design Mockup) -->
+                <div class="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
+                    <img src="{{ asset('images/landing_hero_bg.jpg') }}" alt="CargoTrace Hero Background" class="w-full h-full object-cover object-center" />
                 </div>
 
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-grow">
