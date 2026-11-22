@@ -142,28 +142,38 @@
                         </div>
 
                         <!-- Quick-Click Sample Shipments (Frosted Glass Pills) -->
+                        <!-- Quick Track Scenarios (Matching UAS Final Project Slide 23) -->
                         <div class="space-y-2">
                             <div class="flex items-center justify-between text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
-                                <span>QUICK TRACK SCENARIOS</span>
+                                <span>SKENARIO UAS PER KELOMPOK (SLIDE 23)</span>
                                 <span class="text-slate-400 lowercase font-sans font-medium text-[11px]">Click to trace</span>
                             </div>
                             <div class="flex flex-wrap gap-2.5">
                                 <button type="button" onclick="quickFillTrack('CT-20261118-SEAEUR')" 
-                                    class="group text-left px-3.5 py-2 rounded-2xl bg-white/70 hover:bg-white text-slate-800 border border-white/80 shadow-sm backdrop-blur transition hover:scale-[1.02]">
-                                    <span class="block text-[11px] font-mono font-bold text-[#1e3c4f]">CT-20261118-SEAEUR</span>
-                                    <span class="block text-[10px] text-slate-500 font-medium">Singapore ➔ Rotterdam (Transit)</span>
+                                    class="group text-left px-3.5 py-2.5 rounded-2xl bg-white/75 hover:bg-white text-slate-800 border border-white/90 shadow-sm backdrop-blur transition hover:scale-[1.02]">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-blue-100 text-blue-800 border border-blue-200">GROUP A</span>
+                                        <span class="text-[11px] font-mono font-bold text-[#1e3c4f]">CT-20261118-SEAEUR</span>
+                                    </div>
+                                    <span class="block text-[10px] text-slate-500 font-medium">SE Asia ➔ Europe • Customs Hold (12h)</span>
                                 </button>
                                 
                                 <button type="button" onclick="quickFillTrack('CT-20261118-ASIANAM')" 
-                                    class="group text-left px-3.5 py-2 rounded-2xl bg-white/70 hover:bg-white text-slate-800 border border-white/80 shadow-sm backdrop-blur transition hover:scale-[1.02]">
-                                    <span class="block text-[11px] font-mono font-bold text-rose-600">CT-20261118-ASIANAM</span>
-                                    <span class="block text-[10px] text-slate-500 font-medium">Shanghai ➔ LA (Delay Alert)</span>
+                                    class="group text-left px-3.5 py-2.5 rounded-2xl bg-white/75 hover:bg-white text-slate-800 border border-white/90 shadow-sm backdrop-blur transition hover:scale-[1.02]">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-teal-100 text-teal-800 border border-teal-200">GROUP B</span>
+                                        <span class="text-[11px] font-mono font-bold text-rose-600">CT-20261118-ASIANAM</span>
+                                    </div>
+                                    <span class="block text-[10px] text-slate-500 font-medium">Asia ➔ North America • Weather Delay (18h)</span>
                                 </button>
                                 
                                 <button type="button" onclick="quickFillTrack('CT-20261118-SEAAUS')" 
-                                    class="group text-left px-3.5 py-2 rounded-2xl bg-white/70 hover:bg-white text-slate-800 border border-white/80 shadow-sm backdrop-blur transition hover:scale-[1.02]">
-                                    <span class="block text-[11px] font-mono font-bold text-emerald-700">CT-20261118-SEAAUS</span>
-                                    <span class="block text-[10px] text-slate-500 font-medium">Jakarta ➔ Sydney (Active)</span>
+                                    class="group text-left px-3.5 py-2.5 rounded-2xl bg-white/75 hover:bg-white text-slate-800 border border-white/90 shadow-sm backdrop-blur transition hover:scale-[1.02]">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-amber-100 text-amber-800 border border-amber-200">GROUP C</span>
+                                        <span class="text-[11px] font-mono font-bold text-emerald-700">CT-20261118-SEAAUS</span>
+                                    </div>
+                                    <span class="block text-[10px] text-slate-500 font-medium">SE Asia ➔ Australia • Doc Issue (24h)</span>
                                 </button>
                             </div>
                         </div>
@@ -395,6 +405,128 @@
                             </p>
                         </div>
 
+                    </div>
+
+                    <!-- UAS Final Project: Skenario Unik Per Kelompok (Slide 23) -->
+                    <div class="mt-14 pt-10 border-t border-slate-200/70">
+                        <div class="mb-6">
+                            <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#2c566e]">UAS • Final Project Specification</span>
+                            <h3 class="text-2xl font-black text-slate-900 mt-1">Skenario Unik Per Kelompok (Slide 23)</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Konfigurasi skenario yang dibagikan secara terpisah agar hasil pengujian logistik tidak identik.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Group A Card -->
+                            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between">
+                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#2563eb]"></div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="text-lg font-black text-slate-900">Group A</h4>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200">ACTIVE</span>
+                                    </div>
+                                    <ul class="space-y-2 text-xs text-slate-700 font-medium mb-6">
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>Route:</strong> Southeast Asia → Europe</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>Delay threshold:</strong> 12 jam</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>Exception utama:</strong> customs hold</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>KPI:</strong> on-time delivery rate</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <form action="{{ route('track.search') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="tracking_number" value="CT-20261118-SEAEUR">
+                                    <button type="submit" class="w-full py-2.5 px-4 bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 font-mono">
+                                        <span>Lacak CT-20261118-SEAEUR</span>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Group B Card -->
+                            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between">
+                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#0d9488]"></div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="text-lg font-black text-slate-900">Group B</h4>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-teal-50 text-teal-700 border border-teal-200">ACTIVE</span>
+                                    </div>
+                                    <ul class="space-y-2 text-xs text-slate-700 font-medium mb-6">
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#0d9488] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>Route:</strong> Asia → North America</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#0d9488] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>Delay threshold:</strong> 18 jam</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#0d9488] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>Exception utama:</strong> weather delay</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#0d9488] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>KPI:</strong> average delay duration</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <form action="{{ route('track.search') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="tracking_number" value="CT-20261118-ASIANAM">
+                                    <button type="submit" class="w-full py-2.5 px-4 bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 font-mono">
+                                        <span>Lacak CT-20261118-ASIANAM</span>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Group C Card -->
+                            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between">
+                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#ea580c]"></div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="text-lg font-black text-slate-900">Group C</h4>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200">RESOLVED</span>
+                                    </div>
+                                    <ul class="space-y-2 text-xs text-slate-700 font-medium mb-6">
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>Route:</strong> Southeast Asia → Australia</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>Delay threshold:</strong> 24 jam</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>Exception utama:</strong> documentation issue</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] mt-1.5 flex-shrink-0"></span>
+                                            <span><strong>KPI:</strong> exception resolution time</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <form action="{{ route('track.search') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="tracking_number" value="CT-20261118-SEAAUS">
+                                    <button type="submit" class="w-full py-2.5 px-4 bg-orange-50 hover:bg-orange-100 text-orange-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 font-mono">
+                                        <span>Lacak CT-20261118-SEAAUS</span>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
