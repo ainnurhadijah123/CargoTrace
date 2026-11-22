@@ -39,7 +39,7 @@
             </div>
             <a href="{{ route('operator.shipments.create') }}" class="px-4 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-2 self-start sm:self-auto">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                + Buat Pengiriman Baru
+                Buat Pengiriman Baru
             </a>
         </div>
 
