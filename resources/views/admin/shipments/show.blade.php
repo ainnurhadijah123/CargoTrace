@@ -85,7 +85,7 @@
                             <span class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Cargo Specs & Cost</span>
                             <span class="text-sm font-semibold text-slate-800">{{ $shipment->weight_kg }} kg &bull; {{ $shipment->cargo_type }}</span>
                             <div class="text-base font-black text-emerald-700 mt-1">
-                                {{ $shipment->currency ?? 'IDR' }} {{ number_format($shipment->shipping_cost ?? 0, 0, ',', '.') }}
+                                {{ $shipment->formatted_cost }}
                             </div>
                         </div>
                         

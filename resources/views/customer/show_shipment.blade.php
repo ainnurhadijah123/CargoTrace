@@ -139,7 +139,7 @@
                         </div>
                         <div>
                             <span class="text-slate-400 font-semibold uppercase text-[10px] block">Biaya Pengiriman</span>
-                            <p class="font-bold text-emerald-700 text-sm mt-0.5">Rp {{ number_format($shipment->shipping_cost ?? 0, 0, ',', '.') }}</p>
+                            <p class="font-bold text-emerald-700 text-sm mt-0.5">{{ $shipment->formatted_cost }}</p>
                         </div>
                     </div>
 

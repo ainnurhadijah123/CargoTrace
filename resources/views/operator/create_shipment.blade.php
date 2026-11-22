@@ -189,14 +189,18 @@
                         </div>
 
                         <div class="mb-6">
-                            <label class="block text-xs font-bold text-slate-700 uppercase font-mono tracking-wider mb-1.5">Total Biaya Pengiriman (Shipping Cost) <span class="text-rose-500">*</span></label>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="block text-xs font-bold text-slate-700 uppercase font-mono tracking-wider">Total Biaya Pengiriman (Shipping Cost) <span class="text-rose-500">*</span></label>
+                                <span id="route_scope_badge" class="text-[10px] font-mono font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">Pilih Rute Asal & Tujuan</span>
+                            </div>
                             <div class="flex relative rounded-xl shadow-sm">
-                                <select name="currency" class="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-slate-300 bg-slate-100 text-slate-700 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-teal-600">
+                                <select name="currency" id="currency_select" class="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-slate-300 bg-slate-100 text-slate-700 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-teal-600">
                                     <option value="IDR" {{ old('currency') == 'IDR' ? 'selected' : '' }}>IDR (Rp)</option>
                                     <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>USD ($)</option>
                                 </select>
-                                <input type="number" name="shipping_cost" value="{{ old('shipping_cost') }}" required placeholder="Contoh: 125000000" min="0" step="0.01" class="flex-1 min-w-0 block w-full px-4 py-2.5 bg-slate-50 hover:bg-white focus:bg-white border border-slate-300 rounded-none rounded-r-xl focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm font-medium transition">
+                                <input type="number" id="shipping_cost_input" name="shipping_cost" value="{{ old('shipping_cost') }}" required placeholder="Contoh: 125000000" min="0" step="0.01" class="flex-1 min-w-0 block w-full px-4 py-2.5 bg-slate-50 hover:bg-white focus:bg-white border border-slate-300 rounded-none rounded-r-xl focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm font-medium transition">
                             </div>
+                            <p id="currency_hint" class="mt-1 text-xs text-slate-500">Rute Internasional otomatis menyarankan USD ($), rute Domestik menyarankan IDR (Rp).</p>
                             @error('shipping_cost') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
                         </div>
 
@@ -289,16 +293,42 @@
             function drawRouteLine() {
                 var originId = document.getElementById('origin_select').value;
                 var destId = document.getElementById('destination_select').value;
+                var currencySelect = document.getElementById('currency_select');
+                var costInput = document.getElementById('shipping_cost_input');
+                var routeBadge = document.getElementById('route_scope_badge');
+                var hint = document.getElementById('currency_hint');
 
                 if (polyline) {
                     map.removeLayer(polyline);
                 }
 
-                if (originId && destId && originId !== destId) {
+                if (originId && destId) {
                     var origin = locations.find(l => l.id == originId);
                     var dest = locations.find(l => l.id == destId);
 
-                    if (origin && dest && origin.latitude && dest.latitude) {
+                    // Smart Auto-detection: Domestic (IDR) vs International (USD)
+                    if (origin && dest && origin.country && dest.country) {
+                        var isDomestic = (origin.country.toLowerCase() === 'indonesia' && dest.country.toLowerCase() === 'indonesia');
+                        if (isDomestic) {
+                            if (currencySelect) currencySelect.value = 'IDR';
+                            if (costInput && !costInput.value) costInput.placeholder = 'Contoh: 25000000 (Rupiah)';
+                            if (routeBadge) {
+                                routeBadge.textContent = '🇮🇩 Rute Domestik (IDR)';
+                                routeBadge.className = 'text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-full';
+                            }
+                            if (hint) hint.innerHTML = '<span class="text-emerald-700 font-bold">✓ Terdeteksi Rute Domestik:</span> Sesuai regulasi Bank Indonesia, pengiriman dalam negeri ditagihkan dalam mata uang <strong>Rupiah (IDR)</strong>.';
+                        } else {
+                            if (currencySelect) currencySelect.value = 'USD';
+                            if (costInput && !costInput.value) costInput.placeholder = 'Contoh: 4500 (US Dollar)';
+                            if (routeBadge) {
+                                routeBadge.textContent = '🌐 Rute Internasional (USD)';
+                                routeBadge.className = 'text-[10px] font-mono font-bold text-sky-800 bg-sky-100 border border-sky-300 px-2.5 py-0.5 rounded-full';
+                            }
+                            if (hint) hint.innerHTML = '<span class="text-sky-700 font-bold">✓ Terdeteksi Rute Internasional:</span> Standar logistik kargo lintas benua (Incoterms) ditagihkan dalam mata uang <strong>US Dollar (USD)</strong>.';
+                        }
+                    }
+
+                    if (originId !== destId && origin && dest && origin.latitude && dest.latitude) {
                         var latlngs = [
                             [origin.latitude, origin.longitude],
                             [dest.latitude, dest.longitude]

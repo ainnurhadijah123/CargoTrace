@@ -113,4 +113,27 @@ class Shipment extends Model
             default => 20,
         };
     }
+
+    public function getFormattedCostAttribute(): string
+    {
+        if (!$this->shipping_cost) {
+            return '-';
+        }
+
+        if (strtoupper($this->currency ?? 'IDR') === 'USD') {
+            return '$ ' . number_format($this->shipping_cost, 2);
+        }
+
+        return 'Rp ' . number_format($this->shipping_cost, 0, ',', '.');
+    }
+
+    public function isDomestic(): bool
+    {
+        if (!$this->origin || !$this->destination) {
+            return false;
+        }
+
+        return strtolower($this->origin->country ?? '') === 'indonesia' &&
+               strtolower($this->destination->country ?? '') === 'indonesia';
+    }
 }

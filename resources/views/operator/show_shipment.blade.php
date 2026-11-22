@@ -168,7 +168,7 @@
                             <div>
                                 <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Karakteristik Kargo & Ongkos Angkut</span>
                                 <p class="text-sm font-semibold text-slate-800 capitalize">{{ $shipment->cargo_type }} &bull; {{ number_format($shipment->weight_kg, 1) }} kg</p>
-                                <p class="text-base font-black text-teal-700 mt-1">Rp {{ number_format($shipment->shipping_cost ?? 0, 0, ',', '.') }}</p>
+                                <p class="text-base font-black text-teal-700 mt-1">{{ $shipment->formatted_cost }}</p>
                             </div>
                             
                             <!-- ETA & Delay Analysis -->
