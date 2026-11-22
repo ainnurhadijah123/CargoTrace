@@ -61,8 +61,41 @@ class ShipmentController extends Controller
             $query->where('destination_id', $request->destination_id);
         }
 
+        // Filter by date range (created_at)
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Filter by delay status
+        if ($request->filled('delay_status')) {
+            if ($request->delay_status === 'delayed') {
+                $query->where('status', '!=', 'DELIVERED')
+                      ->whereNotNull('expected_arrival_at')
+                      ->where('expected_arrival_at', '<', now());
+            } elseif ($request->delay_status === 'on_time') {
+                $query->where(function ($q) {
+                    $q->where('status', 'DELIVERED')
+                      ->orWhereNull('expected_arrival_at')
+                      ->orWhere('expected_arrival_at', '>=', now());
+                });
+            }
+        }
+
+        // Server-side Sorting
+        $sort = $request->get('sort', 'created_at');
+        $direction = strtolower($request->get('direction', 'desc')) === 'asc' ? 'asc' : 'desc';
+        $allowedSorts = ['created_at', 'expected_arrival_at', 'shipment_number', 'weight_kg', 'shipping_cost'];
+        if (in_array($sort, $allowedSorts, true)) {
+            $query->orderBy($sort, $direction);
+        } else {
+            $query->latest();
+        }
+
         // Server-side pagination
-        $shipments = $query->latest()->paginate(10)->withQueryString();
+        $shipments = $query->paginate(10)->withQueryString();
 
         $carriers = Carrier::where('is_active', true)->orderBy('name')->get();
         $locations = Location::orderBy('name')->get();
@@ -80,7 +113,11 @@ class ShipmentController extends Controller
         $user = $request->user();
         $shipment = $this->shipments->create($request->validated(), $user);
 
-        return redirect()->route('admin.shipments.show', $shipment)->with('success', 'Shipment order created successfully.');
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.shipments.show', $shipment)->with('success', 'Shipment order created successfully.');
+        }
+
+        return redirect()->route('operator.shipments.show', $shipment->shipment_number)->with('success', 'Shipment order created successfully.');
     }
 
     public function show(Shipment $shipment, EtaService $etaService)

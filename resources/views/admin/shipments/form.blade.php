@@ -12,7 +12,7 @@
             <h3 class="text-lg font-bold text-slate-800">{{ $shipment ? 'Formulir Edit Resi' : 'Formulir Pembuatan Resi Baru' }}</h3>
         </div>
 
-        <form action="{{ $shipment ? route('admin.shipments.update', $shipment) : route('admin.shipments.store') }}" method="POST">
+        <form action="{{ $shipment ? (auth()->user()->isAdmin() ? route('admin.shipments.update', $shipment) : route('operator.shipments.update', $shipment->shipment_number)) : (auth()->user()->isAdmin() ? route('admin.shipments.store') : route('operator.shipments.store')) }}" method="POST">
             @csrf
             @if($shipment)
                 @method('PUT')
@@ -159,7 +159,7 @@
             </div>
 
             <div class="flex justify-end gap-3 p-6 pt-4 border-t border-slate-200 bg-slate-50">
-                <a href="{{ route('admin.shipments.index') }}" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm font-semibold transition">Batal</a>
+                <a href="{{ auth()->user()->isAdmin() ? route('admin.shipments.index') : route('operator.dashboard') }}" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm font-semibold transition">Batal</a>
                 <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition shadow-sm">{{ $shipment ? 'Simpan Perubahan' : 'Buat Resi Baru' }}</button>
             </div>
         </form>

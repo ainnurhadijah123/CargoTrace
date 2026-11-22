@@ -6,8 +6,11 @@ use App\Models\Shipment;
 use App\Models\Carrier;
 use App\Models\Location;
 use App\Models\ShipmentException;
+use App\Models\Notification;
 use App\Services\TrackingService;
 use App\Services\EtaService;
+use App\Services\ExceptionService;
+use App\Services\External\WeatherService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -99,6 +102,17 @@ class DashboardController extends Controller
 
     public function operator(Request $request)
     {
+        $totalOperational = Shipment::count();
+        $inTransit = Shipment::where('status', 'IN_TRANSIT')->count();
+        $delivered = Shipment::where('status', 'DELIVERED')->count();
+        $delayed = Shipment::where('status', '!=', 'DELIVERED')
+            ->whereNotNull('expected_arrival_at')
+            ->where('expected_arrival_at', '<', now())
+            ->count();
+        $openExceptions = DB::table('shipment_exceptions')
+            ->whereIn('status', ['OPEN', 'INVESTIGATING'])
+            ->count();
+
         $query = Shipment::with(['customer', 'carrier', 'origin', 'destination', 'exceptions']);
 
         // Filter status
@@ -108,15 +122,47 @@ class DashboardController extends Controller
 
         // Search
         if ($request->filled('search')) {
-            $query->where('shipment_number', 'like', "%{$request->search}%");
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('shipment_number', 'like', "%{$search}%")
+                  ->orWhere('cargo_type', 'like', "%{$search}%");
+            });
         }
 
-        $shipments = $query->latest()->paginate(10);
-        return view('operator.dashboard', compact('shipments'));
+        if ($request->filled('delay_status')) {
+            if ($request->delay_status === 'delayed') {
+                $query->where('status', '!=', 'DELIVERED')
+                      ->whereNotNull('expected_arrival_at')
+                      ->where('expected_arrival_at', '<', now());
+            } elseif ($request->delay_status === 'on_time') {
+                $query->where(function ($q) {
+                    $q->where('status', 'DELIVERED')
+                      ->orWhereNull('expected_arrival_at')
+                      ->orWhere('expected_arrival_at', '>=', now());
+                });
+            }
+        }
+
+        $shipments = $query->latest()->paginate(10)->withQueryString();
+        $notifications = Notification::where('user_id', Auth::id())->latest()->take(5)->get();
+
+        return view('operator.dashboard', compact(
+            'shipments',
+            'totalOperational',
+            'inTransit',
+            'delivered',
+            'delayed',
+            'openExceptions',
+            'notifications'
+        ));
     }
 
-    public function showShipmentOperator($shipment_number, EtaService $etaService)
-    {
+    public function showShipmentOperator(
+        $shipment_number, 
+        EtaService $etaService, 
+        WeatherService $weatherService, 
+        TrackingService $trackingService
+    ) {
         $shipment = Shipment::with([
             'customer',
             'carrier',
@@ -129,8 +175,17 @@ class DashboardController extends Controller
         ])->where('shipment_number', $shipment_number)->firstOrFail();
 
         $delay = $etaService->calculateDelay($shipment);
+        $allowedStatuses = $trackingService->getNextPossibleStatuses($shipment);
+        $locations = Location::orderBy('name')->get();
+        $exceptionTypes = ExceptionService::VALID_TYPES;
 
-        return view('operator.show_shipment', compact('shipment', 'delay'));
+        // Fetch live weather at current checkpoint or origin
+        $latestEvent = $shipment->trackingEvents->first();
+        $lat = $latestEvent?->latitude ?? $shipment->origin?->latitude ?? 1.2644;
+        $lng = $latestEvent?->longitude ?? $shipment->origin?->longitude ?? 103.8403;
+        $weather = $weatherService->getWeather((float) $lat, (float) $lng);
+
+        return view('operator.show_shipment', compact('shipment', 'delay', 'allowedStatuses', 'locations', 'exceptionTypes', 'weather'));
     }
 
     public function editStatus($shipment_number, TrackingService $trackingService)
@@ -168,15 +223,51 @@ class DashboardController extends Controller
 
     public function customer(Request $request)
     {
-        $shipments = Shipment::with(['origin', 'destination', 'carrier', 'exceptions'])
-            ->where('customer_id', Auth::id())
-            ->latest()
-            ->paginate(10);
+        $userId = Auth::id();
+        $totalMyShipments = Shipment::where('customer_id', $userId)->count();
+        $myInTransit = Shipment::where('customer_id', $userId)->where('status', 'IN_TRANSIT')->count();
+        $myDelivered = Shipment::where('customer_id', $userId)->where('status', 'DELIVERED')->count();
+        $myDelayedOrException = Shipment::where('customer_id', $userId)
+            ->where(function ($q) {
+                $q->where('status', 'EXCEPTION')
+                  ->orWhere(function ($sub) {
+                      $sub->where('status', '!=', 'DELIVERED')
+                          ->whereNotNull('expected_arrival_at')
+                          ->where('expected_arrival_at', '<', now());
+                  });
+            })->count();
 
-        return view('customer.dashboard', compact('shipments'));
+        $query = Shipment::with(['origin', 'destination', 'carrier', 'exceptions'])
+            ->where('customer_id', $userId);
+
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('shipment_number', 'like', "%{$search}%")
+                  ->orWhere('cargo_type', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $shipments = $query->latest()->paginate(10)->withQueryString();
+        $notifications = Notification::where('user_id', $userId)->latest()->take(10)->get();
+        $unreadCount = Notification::where('user_id', $userId)->whereNull('read_at')->count();
+
+        return view('customer.dashboard', compact(
+            'shipments',
+            'totalMyShipments',
+            'myInTransit',
+            'myDelivered',
+            'myDelayedOrException',
+            'notifications',
+            'unreadCount'
+        ));
     }
 
-    public function showShipment($shipment_number, EtaService $etaService)
+    public function showShipment($shipment_number, EtaService $etaService, WeatherService $weatherService)
     {
         $shipment = Shipment::with([
             'customer',
@@ -193,6 +284,12 @@ class DashboardController extends Controller
 
         $delay = $etaService->calculateDelay($shipment);
 
-        return view('customer.show_shipment', compact('shipment', 'delay'));
+        // Fetch live weather at current checkpoint or origin
+        $latestEvent = $shipment->trackingEvents->first();
+        $lat = $latestEvent?->latitude ?? $shipment->origin?->latitude ?? 1.2644;
+        $lng = $latestEvent?->longitude ?? $shipment->origin?->longitude ?? 103.8403;
+        $weather = $weatherService->getWeather((float) $lat, (float) $lng);
+
+        return view('customer.show_shipment', compact('shipment', 'delay', 'weather'));
     }
 }

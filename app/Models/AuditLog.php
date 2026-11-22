@@ -21,10 +21,10 @@ class AuditLog extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function record($action, $model, $description)
+    public static function record($action, $model, $description, ?int $userId = null)
     {
         self::create([
-            'user_id' => auth()->id(),
+            'user_id' => $userId ?? auth()->id(),
             'action' => $action,
             'model' => $model,
             'description' => $description,

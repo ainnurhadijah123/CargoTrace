@@ -5,7 +5,7 @@
 [![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com)
-[![PHPUnit Tests](https://img.shields.io/badge/Tests-26%20Passed-success?style=for-the-badge&logo=phpunit&logoColor=white)](https://phpunit.de)
+[![PHPUnit Tests](https://img.shields.io/badge/Tests-30%20Passed-success?style=for-the-badge&logo=phpunit&logoColor=white)](https://phpunit.de)
 
 > **Web Programming 2 — Final Project (UAS)**  
 > *A software portfolio project demonstrating enterprise software engineering, domain-driven service architecture, REST API design, external API integration, deterministic business logic, and automated testing.*
@@ -141,17 +141,28 @@ A ready-to-import Postman Collection v2.1 is included at [`docs/cargotrace_postm
 
 ---
 
-## 👥 Seed Data & Demo Accounts
+## 👥 Seed Data, Group Scenarios & Demo Accounts
 
-The project includes realistic demonstration data representing unique group scenarios (Southeast Asia &rarr; Europe, Asia &rarr; North America, Southeast Asia &rarr; Australia):
+CargoTrace is pre-configured with complete, realistic seed data specifically mapped to the **Group Scenarios** defined in Slide 23 of the UAS brief, covering all 6 exception types (`CUSTOMS_HOLD`, `WEATHER_DELAY`, `PORT_CONGESTION`, `DAMAGED`, `MISROUTED`, `DOCUMENTATION_ISSUE`) across all lifecycle states:
 
-| Role | Email | Password | Scenario / Scope |
+| Role | Email | Password | Scenario / Scope / Assigned Shipments |
 |---|---|---|---|
-| **Administrator** | `admin@gmail.com` | `admin123` | Control Tower Dashboard, Audit Logs, Master Data |
-| **Logistics Operator** | `operator@gmail.com` | `operator123` | Operational Dispatch, Milestones, Incident Filing |
-| **Customer (Group A)** | `ain@gmail.com` | `ainnur123` | Owns `CT-20261118-SEAEUR` (`CUSTOMS_HOLD` at Suez) & `CT-20261118-DOMEST` |
-| **Customer (Group B)** | `budi@gmail.com` | `budi123` | Owns `CT-20261118-ASIANAM` (Delayed by 19h across Pacific) |
-| **Customer (Group C)** | `charlie@gmail.com` | `charlie123` | Owns `CT-20261118-SEAAUS` (Delivered at Sydney Port) |
+| **Administrator** | `admin@gmail.com` | `admin123` | Control Tower Dashboard, Audit Logs, Master Data Management |
+| **Logistics Operator** | `operator@gmail.com` | `operator123` | Operational Dispatch, Tracking Milestones, Incident Filing & Resolution |
+| **Customer (Group A)** | `ain@gmail.com` | `ainnur123` | **Group A Scenario**: Southeast Asia &rarr; Europe (`CT-20261118-SEAEUR`), Threshold: 12h, Exception: `CUSTOMS_HOLD` (Open). Also owns `CT-20261118-DOMEST` & `CT-20261118-DAMAGED` |
+| **Customer (Group B)** | `budi@gmail.com` | `budi123` | **Group B Scenario**: Asia &rarr; North America (`CT-20261118-ASIANAM`), Threshold: 18h, Exception: `WEATHER_DELAY` (Delayed by 19h). Also owns `CT-20261118-BOOKED` & `CT-20261118-MISROUT` |
+| **Customer (Group C)** | `charlie@gmail.com` | `charlie123` | **Group C Scenario**: Southeast Asia &rarr; Australia (`CT-20261118-SEAAUS`), Threshold: 24h, Exception: `DOCUMENTATION_ISSUE` (Resolved, Delivered). Also owns `CT-20261118-PORTCON` |
+
+### Detailed Seeded Shipment Scenarios
+
+1. **`CT-20261118-SEAEUR` (Group A)**: Singapore (`SIN`) &rarr; Rotterdam (`RTM`) via Maersk (`MSK`). Currently at Suez Canal holding a `CUSTOMS_HOLD` exception (`HIGH` severity, status `OPEN`).
+2. **`CT-20261118-ASIANAM` (Group B)**: Shanghai (`SHA`) &rarr; Los Angeles (`LAX`) via Evergreen (`EVER`). Mid-Pacific checkpoint detour caused by gale swell, delayed by 19 hours past target ETA, triggering a `WEATHER_DELAY` exception (`HIGH` severity, status `OPEN`).
+3. **`CT-20261118-SEAAUS` (Group C)**: Jakarta (`JKT`) &rarr; Sydney (`SYD`) via MSC. Successfully completed voyage and reached terminal status `DELIVERED` after resolving a `DOCUMENTATION_ISSUE` exception (`MEDIUM` severity, status `RESOLVED`).
+4. **`CT-20261118-DOMEST`**: Belawan Medan (`MDN`) &rarr; Tanjung Priok Jakarta (`JKT`) via Sumatera Logistik (`SUMLOG`). Domestic regular cargo, status `IN_TRANSIT`, perfectly on schedule.
+5. **`CT-20261118-BOOKED`**: Singapore (`SIN`) &rarr; Hamburg (`HAM`) via CargoTrace Global (`CTGLOB`). Cold-chain diagnostic reagents, status `BOOKED`.
+6. **`CT-20261118-PORTCON`**: Shanghai (`SHA`) &rarr; Rotterdam (`RTM`) via Maersk (`MSK`). Anchor queue delay in Rotterdam roadstead, holding a `PORT_CONGESTION` exception (`MEDIUM` severity, status `INVESTIGATING`).
+7. **`CT-20261118-DAMAGED`**: Singapore (`SIN`) &rarr; Los Angeles (`LAX`) via MSC. Exterior crate puncture during container yard staging, holding a `DAMAGED` exception (`HIGH` severity, status `OPEN`).
+8. **`CT-20261118-MISROUT`**: Jakarta (`JKT`) &rarr; Hamburg (`HAM`) via Evergreen (`EVER`). Feeder offloaded at Colombo, holding a resolved `MISROUTED` exception (`MEDIUM` severity, status `RESOLVED`), now resumed `IN_TRANSIT`.
 
 ---
 
@@ -200,25 +211,65 @@ Access the application in your browser at `http://127.0.0.1:8000`.
 
 ## 🧪 Automated Testing
 
-CargoTrace includes a test suite covering Authentication, Shipment Lifecycle, State Machine Status Transitions, Deterministic Delay Mathematics, Exception Incident Workflows, and REST API Contracts.
+CargoTrace includes an extensive test suite covering Authentication, In-App Notifications, Shipment Lifecycle, Server-Side Filtering & Sorting, State Machine Status Transitions, Deterministic Delay Mathematics, Exception Incident Workflows, and REST API Contracts.
 
 ```bash
 # Execute the full automated test suite
-php vendor/phpunit/phpunit/phpunit
+php artisan test
 ```
 
 ### Test Evidence
 ```
-PHPUnit 11.5.57 by Sebastian Bergmann and contributors.
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true
 
-Runtime:       PHP 8.2.12
-Configuration: phpunit.xml
+   PASS  Tests\Feature\AuthenticationTest
+  ✓ user can login with valid credentials
+  ✓ user cannot login with invalid password
+  ✓ user can register new customer account
+  ✓ api login returns sanctum bearer token
+  ✓ api register creates account and token
 
-..........................                                        26 / 26 (100%)
+   PASS  Tests\Feature\EtaDelayTest
+  ✓ on time shipment reports no delay
+  ✓ delayed shipment calculates correct delay hours
+  ✓ delay severity categorization high
 
-Time: 00:01.514, Memory: 52.00 MB
+   PASS  Tests\Feature\ExampleTest
+  ✓ root redirects to track portal
+  ✓ tracking portal returns successful response
 
-OK (26 tests, 70 assertions)
+   PASS  Tests\Feature\ExceptionManagementTest
+  ✓ operator can report exception which transitions shipment status
+  ✓ resolving exception resumes transit status
+  ✓ cannot report exception on delivered shipment
+
+   PASS  Tests\Feature\NotificationAndFilterTest
+  ✓ customer can mark notification as read
+  ✓ customer can mark all notifications as read
+  ✓ admin can filter shipments by search and status
+  ✓ operator can access dashboard and create shipment
+
+   PASS  Tests\Feature\RestApiTest
+  ✓ api shipments requires authentication
+  ✓ operator can create shipment via api
+  ✓ customer cannot create shipment via api
+  ✓ api add tracking event and status advance
+  ✓ api public tracking endpoint
+
+   PASS  Tests\Feature\ShipmentLifecycleTest
+  ✓ operator can create shipment with items and initial tracking
+  ✓ customer can only view own shipments
+  ✓ admin can delete shipment in created status
+  ✓ cannot delete shipment already in transit
+
+   PASS  Tests\Feature\TrackingStatusTransitionTest
+  ✓ valid lifecycle status transitions
+  ✓ invalid status transition is rejected
+  ✓ cannot transition from terminal status delivered
+
+  Tests:    30 passed (86 assertions)
+  Duration: 5.12s
 ```
 
 ---

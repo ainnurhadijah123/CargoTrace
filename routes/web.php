@@ -11,6 +11,7 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\TrackingEventController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\ExceptionController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
 
 // ==========================================
@@ -55,6 +56,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/shipments/{shipment}/exceptions', [ExceptionController::class, 'store'])->name('exceptions.store');
     Route::patch('/exceptions/{exception}/resolve', [ExceptionController::class, 'resolve'])->name('exceptions.resolve');
 
+    // In-App Notifications
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
+
     // Administrator Section
     Route::middleware(['role:ADMIN'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
@@ -73,6 +78,8 @@ Route::middleware('auth')->group(function () {
     // Logistics Operator Section
     Route::middleware(['role:OPERATOR'])->prefix('operator')->name('operator.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'operator'])->name('dashboard');
+        Route::get('/shipments/create', [ShipmentController::class, 'create'])->name('shipments.create');
+        Route::post('/shipments', [ShipmentController::class, 'store'])->name('shipments.store');
         Route::get('/shipments/{shipment_number}/detail', [DashboardController::class, 'showShipmentOperator'])->name('shipments.show');
         Route::get('/shipments/{shipment_number}/edit', [DashboardController::class, 'editStatus'])->name('shipments.edit');
         Route::put('/shipments/{shipment_number}/update', [DashboardController::class, 'updateStatus'])->name('shipments.update');
