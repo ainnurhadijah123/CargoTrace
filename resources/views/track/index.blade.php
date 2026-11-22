@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Shipment - CargoTrace Global Visibility</title>
+    <title>CargoTrace - Global Shipment Visibility & Real-Time Tracking</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -20,44 +20,36 @@
         .font-mono { font-family: 'JetBrains Mono', monospace; }
         .leaflet-routing-container, .leaflet-routing-container-hide, .leaflet-right { display: none !important; }
         
-        /* Custom scrollbar */
+        /* Custom scrollbar for frosted drawer */
         .hud-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
-        .hud-scroll::-webkit-scrollbar-track { background: #f0f9ff; }
-        .hud-scroll::-webkit-scrollbar-thumb { background: #7dd3fc; border-radius: 4px; }
-        .hud-scroll::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
-
-        @keyframes float-cloud {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-        .animate-float {
-            animation: float-cloud 6s ease-in-out infinite;
-        }
+        .hud-scroll::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.4); }
+        .hud-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        .hud-scroll::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
 </head>
-<body class="bg-sky-50/40 font-sans text-slate-800 min-h-screen flex flex-col selection:bg-sky-400 selection:text-white">
+<body class="bg-[#eaf1f6] font-sans text-slate-800 min-h-screen flex flex-col selection:bg-slate-800 selection:text-white">
 
-    <!-- Navbar: Sky Blue with Cloud White typography -->
-    <nav class="bg-[#177be5] border-b border-white/20 sticky top-0 z-50 transition-colors shadow-sm">
+    <!-- Navbar: Frosted Ice Glassmorphism -->
+    <nav class="bg-[#eaf1f6]/75 backdrop-blur-md border-b border-white/60 sticky top-0 z-50 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <a href="{{ route('track.index') }}" class="text-2xl font-black text-white tracking-tight flex items-center gap-2 group">
-                    <span class="p-1.5 rounded-xl bg-white text-[#177be5] shadow-md group-hover:scale-105 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <a href="{{ route('track.index') }}" class="text-2xl font-black text-[#0b1723] tracking-tight flex items-center gap-2.5 group">
+                    <span class="p-1.5 rounded-xl bg-[#0c1a24] text-white shadow-md group-hover:scale-105 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                     </span>
-                    <span>CargoTrace<span class="text-amber-300">.</span></span>
+                    <span>CargoTrace<span class="text-[#2c566e]">.</span></span>
                 </a>
-                <span class="hidden md:inline-flex items-center gap-1.5 px-3 py-0.5 text-[11px] font-bold rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-sm">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-ping"></span>
-                    Live 3D Telemetry
+                <span class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold rounded-full bg-[#c8dde8] text-[#1e3c4f] border border-white/70 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-[#2a6d85] animate-ping"></span>
+                    LIVE 3D Telemetry
                 </span>
             </div>
             
-            <div class="flex items-center gap-3 sm:gap-6">
-                <a href="#active-routes" class="hidden sm:inline-block text-xs font-bold text-white/90 hover:text-white transition">
+            <div class="flex items-center gap-4 sm:gap-6">
+                <a href="#active-routes" class="hidden sm:inline-block text-xs font-bold text-slate-700 hover:text-[#0b1723] transition">
                     Trade Corridors
                 </a>
-                <a href="#platform-specs" class="hidden sm:inline-block text-xs font-bold text-white/90 hover:text-white transition">
+                <a href="#platform-specs" class="hidden sm:inline-block text-xs font-bold text-slate-700 hover:text-[#0b1723] transition">
                     Specs & Architecture
                 </a>
 
@@ -70,17 +62,17 @@
                             default => route('customer.dashboard'),
                         };
                     @endphp
-                    <div class="flex items-center gap-2">
-                        <span class="hidden lg:inline-block px-2.5 py-0.5 text-[10px] font-mono font-bold rounded-full bg-white/20 text-white border border-white/30">
-                            {{ $userRole }}
+                    <div class="flex items-center gap-3">
+                        <span class="hidden lg:inline-block text-xs font-mono font-bold text-slate-500 uppercase">
+                            | {{ $userRole }}
                         </span>
-                        <a href="{{ $dashRoute }}" class="text-xs font-bold text-[#177be5] bg-white hover:bg-sky-50 shadow-md px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                        <a href="{{ $dashRoute }}" class="text-xs font-bold text-white bg-[#0c1a24] hover:bg-slate-800 shadow-md px-5 py-2.5 rounded-full transition flex items-center gap-1.5">
                             <span>Dashboard</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="text-xs font-bold text-[#177be5] bg-white hover:bg-sky-50 shadow-md px-5 py-2 rounded-xl transition">
+                    <a href="{{ route('login') }}" class="text-xs font-bold text-white bg-[#0c1a24] hover:bg-slate-800 shadow-md px-6 py-2.5 rounded-full transition">
                         Sign In
                     </a>
                 @endauth
@@ -93,18 +85,31 @@
         
         @if(!isset($shipment))
             <!-- ======================================================== -->
-            <!-- SKY BLUE & CLOUD WHITE 3D GLOBE HERO EXPERIENCE          -->
+            <!-- LIQUID ICE & SILVER-SLATE 3D GLOBE HERO EXPERIENCE       -->
             <!-- ======================================================== -->
-            <section class="relative min-h-[90vh] lg:min-h-[92vh] flex flex-col justify-center overflow-hidden bg-gradient-to-b from-[#1570df] via-[#2189f7] to-[#4fa7f9] text-white border-b border-sky-300/30">
+            <section class="relative min-h-[90vh] lg:min-h-[92vh] flex flex-col justify-center overflow-hidden bg-gradient-to-b from-[#eaf1f6] via-[#e1ecf3] to-[#d6e5ee] border-b border-white/60">
                 
-                <!-- Ambient Sunlight & Soft Cloud Layers -->
-                <div class="absolute right-10 top-1/4 w-[600px] h-[600px] bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="absolute left-10 bottom-10 w-96 h-96 bg-sky-200/20 rounded-full blur-3xl pointer-events-none"></div>
+                <!-- Fluid Abstract Wave on the Right (Deep Muted Teal/Slate) -->
+                <div class="absolute right-0 top-0 bottom-0 w-full lg:w-7/12 pointer-events-none overflow-hidden z-0">
+                    <svg class="absolute right-0 top-0 h-full w-full object-cover opacity-90" viewBox="0 0 700 800" fill="none" preserveAspectRatio="none">
+                        <path d="M220,0 C100,180 60,420 160,610 C220,710 320,770 460,800 L700,800 L700,0 Z" fill="url(#tealFluidGradient)" />
+                        <defs>
+                            <linearGradient id="tealFluidGradient" x1="10%" y1="0%" x2="90%" y2="100%">
+                                <stop offset="0%" stop-color="#3c657a" />
+                                <stop offset="45%" stop-color="#284858" />
+                                <stop offset="100%" stop-color="#16303d" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <!-- Soft Ambient Highlights -->
+                    <div class="absolute right-1/4 top-1/4 w-96 h-96 bg-white/15 rounded-full blur-3xl"></div>
+                    <div class="absolute right-10 bottom-10 w-72 h-72 bg-sky-200/20 rounded-full blur-2xl"></div>
+                </div>
 
-                <!-- Realistic Fluffy White Cloud Wave at the base of Hero -->
-                <div class="absolute bottom-0 inset-x-0 pointer-events-none z-10">
-                    <svg class="w-full h-20 sm:h-28 text-sky-50/90 fill-current preserve-3d" viewBox="0 0 1440 120" preserveAspectRatio="none">
-                        <path d="M0,32L48,42.7C96,53,192,75,288,80C384,85,480,75,576,64C672,53,768,43,864,48C960,53,1056,75,1152,80C1248,85,1344,75,1392,69.3L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+                <!-- Soft Flowing Ice Wave on the Bottom-Left -->
+                <div class="absolute left-0 bottom-0 w-full lg:w-3/5 h-48 pointer-events-none z-0">
+                    <svg class="w-full h-full opacity-60" viewBox="0 0 700 200" fill="none" preserveAspectRatio="none">
+                        <path d="M0,120 C180,60 360,180 700,90 L700,200 L0,200 Z" fill="#ffffff" />
                     </svg>
                 </div>
 
@@ -113,171 +118,159 @@
                     <!-- Left Hero Content & Search Box (5 cols) -->
                     <div class="lg:col-span-5 flex flex-col justify-center space-y-6">
                         
-                        <!-- Telemetry Status Tag (Cloud White Pill) -->
-                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 border border-white/30 text-xs font-semibold text-white w-fit backdrop-blur-md shadow-sm">
-                            <span class="relative flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-300"></span>
-                            </span>
-                            <span class="font-mono text-[11px] uppercase tracking-wider text-white">REAL-TIME GLOBAL TELEMETRY</span>
-                            <span class="text-white/60">•</span>
-                            <span class="text-[11px] text-white/90">{{ count($globeRoutes) }} Trade Lanes</span>
+                        <!-- Telemetry Status Tag (Frosted Ice Pill) -->
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/60 border border-white/80 text-xs font-semibold text-[#1e3c4f] w-fit backdrop-blur-md shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-[#2a6d85]"></span>
+                            <span class="font-mono text-[11px] uppercase tracking-wider font-bold">REAL-TIME GLOBAL TELEMETRY • 8 Trade Lanes</span>
                         </div>
 
-                        <!-- Main Bold Headline (Bold style inspired by PLAY STRONG) -->
+                        <!-- Main Bold Headline (Exact Typography from Mockup) -->
                         <div>
-                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.05] drop-shadow-sm">
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-[#0b1723] tracking-tight uppercase leading-[1.05]">
                                 GLOBAL<br>VISIBILITY.
                             </h1>
-                            <p class="mt-4 text-white/90 text-sm sm:text-base font-medium leading-relaxed max-w-lg">
+                            <p class="mt-4 text-slate-600 text-sm sm:text-base font-medium leading-relaxed max-w-lg">
                                 Real-time multimodal cargo visibility across intercontinental air, ocean, and ground freight. Track live coordinates, weather checkpoints, and automated ETA delay analytics.
                             </p>
                         </div>
 
-                        <!-- Tracking Search Box (Clean Cloud White Card) -->
-                        <div class="bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-2xl border border-white/80 text-slate-800">
-                            <form action="{{ route('track.search') }}" method="POST" class="flex flex-col sm:flex-row gap-2">
+                        <!-- Tracking Search Box (Frosted Glassmorphism Card) -->
+                        <div class="bg-white/80 backdrop-blur-xl p-2.5 rounded-3xl shadow-[0_12px_35px_rgba(42,75,94,0.08)] border border-white/90 text-slate-800">
+                            <form action="{{ route('track.search') }}" method="POST" class="flex flex-col sm:flex-row gap-2 items-center">
                                 @csrf
-                                <div class="relative flex-grow">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-sky-500">
-                                        <svg class="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <div class="relative flex-grow w-full">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                                        <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </div>
                                     <input type="text" name="tracking_number" id="tracking_input" value="{{ old('tracking_number') }}" 
-                                        placeholder="ENTER RESI: CT-20261118-SEAEUR" required 
-                                        class="w-full pl-11 pr-4 py-3.5 rounded-xl bg-sky-50/70 border border-sky-200 text-slate-900 placeholder-sky-400 focus:bg-white focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition font-mono font-bold tracking-wider uppercase text-sm">
+                                        placeholder="ENTER RESI : CT-20261118-SEAEUR" required 
+                                        class="w-full pl-11 pr-4 py-3 rounded-2xl bg-transparent text-[#0b1723] placeholder-slate-400 focus:outline-none transition font-mono font-bold tracking-wider uppercase text-sm">
                                 </div>
-                                <button type="submit" class="py-3.5 px-6 bg-gradient-to-r from-[#177be5] to-sky-500 hover:from-[#1366c0] hover:to-sky-600 text-white font-bold rounded-xl shadow-lg shadow-sky-500/30 transition text-sm flex items-center justify-center gap-2 whitespace-nowrap">
+                                <button type="submit" class="w-full sm:w-auto py-3 px-6 bg-white hover:bg-slate-50 text-[#0b1723] border border-slate-200/90 font-bold rounded-2xl shadow-sm transition text-xs flex items-center justify-center gap-1.5 whitespace-nowrap">
                                     <span>Track Cargo</span>
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                 </button>
                             </form>
 
                             @if(session('error'))
-                                <div class="mt-3 p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-xs font-semibold flex items-center gap-2">
+                                <div class="mt-2.5 p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-2xl text-xs font-semibold flex items-center gap-2">
                                     <svg class="w-4 h-4 text-rose-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     <span>{{ session('error') }}</span>
                                 </div>
                             @endif
                         </div>
 
-                        <!-- Quick-Click Sample Shipments (Cloud White Pills) -->
+                        <!-- Quick-Click Sample Shipments (Frosted Glass Pills) -->
                         <div class="space-y-2">
-                            <div class="flex items-center justify-between text-xs text-white/90 font-bold">
-                                <span class="uppercase tracking-wider">Quick Track Scenarios:</span>
-                                <span class="text-amber-200 text-[11px]">Click to trace</span>
+                            <div class="flex items-center justify-between text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
+                                <span>QUICK TRACK SCENARIOS</span>
+                                <span class="text-slate-400 lowercase font-sans font-medium text-[11px]">Click to trace</span>
                             </div>
-                            <div class="flex flex-wrap gap-2">
+                            <div class="flex flex-wrap gap-2.5">
                                 <button type="button" onclick="quickFillTrack('CT-20261118-SEAEUR')" 
-                                    class="group text-left px-3 py-1.5 rounded-xl bg-white/90 hover:bg-white text-slate-800 border border-white/90 shadow-md backdrop-blur transition hover:scale-[1.02]">
-                                    <span class="block text-[11px] font-mono font-bold text-[#177be5]">CT-20261118-SEAEUR</span>
+                                    class="group text-left px-3.5 py-2 rounded-2xl bg-white/70 hover:bg-white text-slate-800 border border-white/80 shadow-sm backdrop-blur transition hover:scale-[1.02]">
+                                    <span class="block text-[11px] font-mono font-bold text-[#1e3c4f]">CT-20261118-SEAEUR</span>
                                     <span class="block text-[10px] text-slate-500 font-medium">Singapore ➔ Rotterdam (Transit)</span>
                                 </button>
                                 
                                 <button type="button" onclick="quickFillTrack('CT-20261118-ASIANAM')" 
-                                    class="group text-left px-3 py-1.5 rounded-xl bg-white/90 hover:bg-white text-slate-800 border border-white/90 shadow-md backdrop-blur transition hover:scale-[1.02]">
+                                    class="group text-left px-3.5 py-2 rounded-2xl bg-white/70 hover:bg-white text-slate-800 border border-white/80 shadow-sm backdrop-blur transition hover:scale-[1.02]">
                                     <span class="block text-[11px] font-mono font-bold text-rose-600">CT-20261118-ASIANAM</span>
                                     <span class="block text-[10px] text-slate-500 font-medium">Shanghai ➔ LA (Delay Alert)</span>
                                 </button>
                                 
                                 <button type="button" onclick="quickFillTrack('CT-20261118-SEAAUS')" 
-                                    class="group text-left px-3 py-1.5 rounded-xl bg-white/90 hover:bg-white text-slate-800 border border-white/90 shadow-md backdrop-blur transition hover:scale-[1.02]">
-                                    <span class="block text-[11px] font-mono font-bold text-emerald-600">CT-20261118-SEAAUS</span>
+                                    class="group text-left px-3.5 py-2 rounded-2xl bg-white/70 hover:bg-white text-slate-800 border border-white/80 shadow-sm backdrop-blur transition hover:scale-[1.02]">
+                                    <span class="block text-[11px] font-mono font-bold text-emerald-700">CT-20261118-SEAAUS</span>
                                     <span class="block text-[10px] text-slate-500 font-medium">Jakarta ➔ Sydney (Active)</span>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Live Telemetry KPI Counters (Cloud White Frosted Cards) -->
-                        <div class="grid grid-cols-4 gap-2 pt-2">
-                            <div class="p-2.5 rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 text-center shadow-lg">
-                                <div class="text-xl font-black font-mono text-slate-800">{{ $stats['total'] }}</div>
-                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Total</div>
+                        <!-- Live Telemetry KPI Counters (Frosted White Cards) -->
+                        <div class="grid grid-cols-4 gap-2.5 pt-2">
+                            <div class="p-3 rounded-2xl bg-white/75 backdrop-blur-md border border-white/90 text-center shadow-[0_6px_20px_rgba(42,75,94,0.06)]">
+                                <div class="text-xl font-black font-mono text-[#0b1723]">{{ $stats['total'] }}</div>
+                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">TOTAL</div>
                             </div>
-                            <div class="p-2.5 rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 text-center shadow-lg">
-                                <div class="text-xl font-black font-mono text-[#177be5]">{{ $stats['in_transit'] }}</div>
-                                <div class="text-[10px] font-bold text-sky-700 uppercase tracking-tight">Transit</div>
+                            <div class="p-3 rounded-2xl bg-white/75 backdrop-blur-md border border-white/90 text-center shadow-[0_6px_20px_rgba(42,75,94,0.06)]">
+                                <div class="text-xl font-black font-mono text-[#1e3c4f]">{{ $stats['in_transit'] }}</div>
+                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">TRANSIT</div>
                             </div>
-                            <div class="p-2.5 rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 text-center shadow-lg">
-                                <div class="text-xl font-black font-mono text-rose-500">{{ $stats['exceptions'] }}</div>
-                                <div class="text-[10px] font-bold text-rose-600 uppercase tracking-tight">Delays</div>
+                            <div class="p-3 rounded-2xl bg-white/75 backdrop-blur-md border border-white/90 text-center shadow-[0_6px_20px_rgba(42,75,94,0.06)]">
+                                <div class="text-xl font-black font-mono text-rose-600">{{ $stats['exceptions'] }}</div>
+                                <div class="text-[10px] font-bold text-rose-700 uppercase tracking-tight">DELAYS</div>
                             </div>
-                            <div class="p-2.5 rounded-2xl bg-white/90 backdrop-blur-md border border-white/80 text-center shadow-lg">
-                                <div class="text-xl font-black font-mono text-emerald-600">{{ $stats['delivered'] }}</div>
-                                <div class="text-[10px] font-bold text-emerald-700 uppercase tracking-tight">Arrived</div>
+                            <div class="p-3 rounded-2xl bg-white/75 backdrop-blur-md border border-white/90 text-center shadow-[0_6px_20px_rgba(42,75,94,0.06)]">
+                                <div class="text-xl font-black font-mono text-emerald-700">{{ $stats['delivered'] }}</div>
+                                <div class="text-[10px] font-bold text-emerald-700 uppercase tracking-tight">ARRIVED</div>
                             </div>
                         </div>
 
                     </div>
 
                     <!-- Right 3D Interactive WebGL Globe Stage (7 cols) -->
-                    <div class="lg:col-span-7 relative h-[420px] sm:h-[500px] lg:h-[560px] w-full flex items-center justify-center overflow-hidden">
+                    <div class="lg:col-span-7 relative h-[460px] sm:h-[540px] lg:h-[600px] w-full flex items-center justify-center">
                         
                         <!-- 3D Canvas Container -->
-                        <div id="globe-container" class="w-full h-full relative cursor-grab active:cursor-grabbing select-none">
+                        <div id="globe-container" class="w-full h-full relative cursor-grab active:cursor-grabbing select-none flex items-center justify-center">
                             <canvas id="globe-canvas" class="w-full h-full block"></canvas>
                         </div>
 
-                        <!-- 3D Globe HUD Overlay: Top Right Controls (Cloud White Glass) -->
+                        <!-- 3D Globe HUD Overlay: Top Right Controls (Frosted Glass) -->
                         <div class="absolute top-4 right-4 z-20 flex flex-col gap-2">
                             <button id="btn-toggle-rotate" type="button" title="Toggle Auto-Rotation"
-                                class="px-3.5 py-1.5 bg-white/90 hover:bg-white text-slate-800 border border-white/80 rounded-xl text-xs font-mono font-bold backdrop-blur shadow-lg transition flex items-center gap-1.5">
+                                class="px-3.5 py-1.5 bg-white/65 hover:bg-white text-slate-800 border border-white/80 rounded-xl text-xs font-mono font-bold backdrop-blur shadow-sm transition flex items-center gap-1.5">
                                 <span id="rotate-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span id="rotate-text">Rotate: ON</span>
+                                <span id="rotate-text">Rotate : ON</span>
                             </button>
                             <div class="flex gap-1 justify-end">
                                 <button id="btn-zoom-in" type="button" title="Zoom In"
-                                    class="w-8 h-8 bg-white/90 hover:bg-white text-slate-800 border border-white/80 rounded-xl text-base font-bold backdrop-blur shadow-md flex items-center justify-center transition">
+                                    class="w-8 h-8 bg-white/65 hover:bg-white text-slate-800 border border-white/80 rounded-xl text-base font-bold backdrop-blur shadow-sm flex items-center justify-center transition">
                                     +
                                 </button>
                                 <button id="btn-zoom-out" type="button" title="Zoom Out"
-                                    class="w-8 h-8 bg-white/90 hover:bg-white text-slate-800 border border-white/80 rounded-xl text-base font-bold backdrop-blur shadow-md flex items-center justify-center transition">
+                                    class="w-8 h-8 bg-white/65 hover:bg-white text-slate-800 border border-white/80 rounded-xl text-base font-bold backdrop-blur shadow-sm flex items-center justify-center transition">
                                     −
                                 </button>
                                 <button id="btn-reset-view" type="button" title="Reset View"
-                                    class="px-2.5 h-8 bg-white/90 hover:bg-white text-slate-800 border border-white/80 rounded-xl text-xs font-mono font-bold backdrop-blur shadow-md flex items-center justify-center transition">
+                                    class="px-2.5 h-8 bg-white/65 hover:bg-white text-slate-800 border border-white/80 rounded-xl text-xs font-mono font-bold backdrop-blur shadow-sm flex items-center justify-center transition">
                                     Reset
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Arc Status Legend: Bottom Left of 3D Stage (Cloud White Glass) -->
-                        <div class="absolute bottom-6 left-4 z-20 bg-white/95 backdrop-blur-md border border-white/90 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-4 text-xs font-mono font-bold text-slate-700">
+                        <!-- Arc Status Legend: Bottom Center (Frosted Glass matching Mockup) -->
+                        <div class="absolute bottom-6 left-6 z-20 bg-white/60 backdrop-blur-md border border-white/80 px-4 py-2 rounded-2xl shadow-sm flex items-center gap-4 text-xs font-mono font-bold text-slate-700">
                             <div class="flex items-center gap-1.5">
-                                <span class="w-3 h-1.5 rounded-full bg-sky-500 shadow-sm"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-white shadow-sm ring-1 ring-slate-300"></span>
                                 <span>In Transit</span>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <span class="w-3 h-1.5 rounded-full bg-rose-500 shadow-sm"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#3d657d] shadow-sm"></span>
                                 <span>Exception</span>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <span class="w-3 h-1.5 rounded-full bg-emerald-500 shadow-sm"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#10b981] shadow-sm"></span>
                                 <span>Delivered</span>
                             </div>
                         </div>
 
-                        <!-- Active Route Mini Drawer: Bottom Right (Cloud White Glass) -->
+                        <!-- Active Route Drawer: Bottom Right (Frosted Glass matching Mockup) -->
                         <div class="absolute bottom-6 right-4 z-20 max-w-xs hidden sm:block">
-                            <div class="bg-white/95 backdrop-blur-md border border-white/90 rounded-2xl p-3 shadow-2xl text-slate-800">
-                                <div class="flex items-center justify-between pb-2 mb-2 border-b border-sky-100 text-[10px] font-mono font-bold text-sky-700 uppercase tracking-wider">
-                                    <span>Active Global Hubs</span>
-                                    <span class="text-[#177be5] font-black">10 Ports</span>
+                            <div class="bg-white/40 backdrop-blur-xl border border-white/60 rounded-2xl p-4 shadow-xl text-slate-800">
+                                <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/40 text-[10px] font-mono font-bold text-slate-600 uppercase tracking-wider">
+                                    <span>ACTIVE GLOBAL HUBS</span>
+                                    <span class="text-[#1e3c4f] font-black">10 PORTS</span>
                                 </div>
-                                <div class="space-y-1.5 max-h-28 overflow-y-auto hud-scroll pr-1">
+                                <div class="space-y-2 max-h-28 overflow-y-auto hud-scroll pr-1">
                                     @foreach(collect($globeRoutes)->take(4) as $rt)
-                                        <div onclick="focusRoute('{{ $rt['resi'] }}')" class="flex items-center justify-between text-[11px] p-1.5 rounded-xl hover:bg-sky-50 cursor-pointer transition">
+                                        <div onclick="focusRoute('{{ $rt['resi'] }}')" class="flex items-center justify-between text-[11px] p-1.5 rounded-xl hover:bg-white/50 cursor-pointer transition">
                                             <div class="flex items-center gap-1.5">
-                                                @php
-                                                    $pillColor = match($rt['status']) {
-                                                        'DELIVERED' => 'bg-emerald-500',
-                                                        'EXCEPTION' => 'bg-rose-500',
-                                                        default => 'bg-sky-500',
-                                                    };
-                                                @endphp
-                                                <span class="w-1.5 h-1.5 rounded-full {{ $pillColor }}"></span>
+                                                <span class="w-2 h-2 rounded-full bg-white ring-1 ring-slate-400"></span>
                                                 <span class="font-mono font-bold text-slate-800">{{ $rt['origin']['code'] }} ➔ {{ $rt['destination']['code'] }}</span>
                                             </div>
-                                            <span class="text-[10px] text-[#177be5] font-mono font-bold hover:underline">Focus</span>
+                                            <span class="text-[10px] text-[#2c566e] font-mono font-bold hover:underline">Focus</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -290,18 +283,18 @@
             </section>
 
             <!-- ======================================================== -->
-            <!-- ACTIVE TRADE CORRIDORS GRID (Fresh Cloud White Cards)    -->
+            <!-- ACTIVE TRADE CORRIDORS GRID (Frosted Ice Cards)          -->
             <!-- ======================================================== -->
-            <section id="active-routes" class="py-16 bg-sky-50/70 border-b border-sky-100">
+            <section id="active-routes" class="py-16 bg-[#e4eff6]/80 border-b border-white/60">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     
                     <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
                         <div>
-                            <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#177be5]">Intercontinental Corridors</span>
-                            <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-1">Monitored Global Shipments</h2>
+                            <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#2c566e]">Intercontinental Corridors</span>
+                            <h2 class="text-3xl sm:text-4xl font-black text-[#0b1723] mt-1">Monitored Global Shipments</h2>
                             <p class="text-sm text-slate-600 mt-1 max-w-xl">Live shipment pipelines configured in accordance with the Web Programming 2 final project specifications.</p>
                         </div>
-                        <div class="mt-4 md:mt-0 flex items-center gap-2 text-xs font-mono font-bold text-sky-700 bg-white px-3 py-1.5 rounded-xl border border-sky-100 shadow-sm">
+                        <div class="mt-4 md:mt-0 flex items-center gap-2 text-xs font-mono font-bold text-[#1e3c4f] bg-white/80 px-3.5 py-1.5 rounded-2xl border border-white/90 shadow-sm">
                             <span>Showing {{ count($allShipments) }} Active Pipelines</span>
                         </div>
                     </div>
@@ -312,34 +305,34 @@
                                 $statusBadgeClass = match($s->status) {
                                     'DELIVERED' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
                                     'EXCEPTION' => 'bg-rose-50 text-rose-700 border-rose-200',
-                                    'IN_TRANSIT' => 'bg-sky-50 text-[#177be5] border-sky-200',
+                                    'IN_TRANSIT' => 'bg-sky-50 text-[#1e3c4f] border-sky-200',
                                     default => 'bg-slate-100 text-slate-700 border-slate-200',
                                 };
                             @endphp
-                            <div class="bg-white rounded-2xl border border-sky-100 p-6 flex flex-col justify-between hover:border-sky-300 hover:shadow-xl transition duration-300 shadow-sm group">
+                            <div class="bg-white/85 backdrop-blur-md rounded-2xl border border-white/90 p-6 flex flex-col justify-between hover:shadow-xl hover:border-slate-300 transition duration-300 shadow-[0_6px_25px_rgba(42,75,94,0.06)] group">
                                 <div>
                                     <div class="flex items-center justify-between mb-3">
-                                        <span class="font-mono text-xs font-bold text-slate-700 group-hover:text-[#177be5] transition">{{ $s->shipment_number }}</span>
+                                        <span class="font-mono text-xs font-bold text-slate-700 group-hover:text-[#2c566e] transition">{{ $s->shipment_number }}</span>
                                         <span class="px-2.5 py-0.5 text-[10px] font-mono font-bold rounded-full border uppercase {{ $statusBadgeClass }}">
                                             {{ $s->status }}
                                         </span>
                                     </div>
 
                                     <!-- Hub to Hub Direction -->
-                                    <div class="my-4 p-3.5 bg-sky-50/70 rounded-xl border border-sky-100">
+                                    <div class="my-4 p-3.5 bg-[#f0f6fa] rounded-xl border border-sky-100/80">
                                         <div class="flex items-center justify-between text-xs">
                                             <div class="text-left">
                                                 <div class="text-[10px] text-slate-400 uppercase font-mono font-semibold">Origin</div>
                                                 <div class="font-black text-slate-900">{{ $s->origin?->city ?? 'Origin' }}</div>
-                                                <div class="text-[10px] text-sky-700 font-mono font-bold">{{ $s->origin?->code }}</div>
+                                                <div class="text-[10px] text-[#2c566e] font-mono font-bold">{{ $s->origin?->code }}</div>
                                             </div>
                                             <div class="px-3 flex flex-col items-center">
-                                                <svg class="w-5 h-5 text-[#177be5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                                <svg class="w-5 h-5 text-[#2c566e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                             </div>
                                             <div class="text-right">
                                                 <div class="text-[10px] text-slate-400 uppercase font-mono font-semibold">Destination</div>
                                                 <div class="font-black text-slate-900">{{ $s->destination?->city ?? 'Destination' }}</div>
-                                                <div class="text-[10px] text-sky-700 font-mono font-bold">{{ $s->destination?->code }}</div>
+                                                <div class="text-[10px] text-[#2c566e] font-mono font-bold">{{ $s->destination?->code }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -360,11 +353,11 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-6 pt-4 border-t border-sky-100 flex items-center justify-between">
+                                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                                     <form action="{{ route('track.search') }}" method="POST" class="w-full">
                                         @csrf
                                         <input type="hidden" name="tracking_number" value="{{ $s->shipment_number }}">
-                                        <button type="submit" class="w-full py-2.5 px-4 bg-sky-50 hover:bg-[#177be5] text-[#177be5] hover:text-white border border-sky-200 hover:border-[#177be5] font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm">
+                                        <button type="submit" class="w-full py-2.5 px-4 bg-[#132836] hover:bg-[#0c1a24] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm">
                                             <span>Track Milestone Details</span>
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                         </button>
@@ -380,19 +373,19 @@
             <!-- ======================================================== -->
             <!-- SPECS & SYSTEM ARCHITECTURE                              -->
             <!-- ======================================================== -->
-            <section id="platform-specs" class="py-16 bg-white text-slate-800 border-b border-sky-100">
+            <section id="platform-specs" class="py-16 bg-white text-slate-800 border-b border-slate-100">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     
                     <div class="text-center max-w-2xl mx-auto mb-12">
-                        <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#177be5]">Architecture Overview</span>
+                        <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#2c566e]">Architecture Overview</span>
                         <h2 class="text-3xl font-black text-slate-900 mt-1">Engineered for Global Logistics</h2>
                         <p class="text-sm text-slate-600 mt-2">Comprehensive stack built with Laravel 12, SQLite, Three.js WebGL, Leaflet OSM, Open-Meteo REST API, and RBAC security.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         
-                        <div class="p-6 rounded-2xl bg-sky-50/60 border border-sky-100 space-y-3 shadow-sm hover:border-sky-300 transition">
-                            <div class="w-12 h-12 rounded-2xl bg-[#177be5] text-white flex items-center justify-center shadow-md shadow-sky-500/25">
+                        <div class="p-6 rounded-2xl bg-[#f0f6fa] border border-sky-100/80 space-y-3 shadow-sm hover:border-slate-300 transition">
+                            <div class="w-12 h-12 rounded-2xl bg-[#132836] text-white flex items-center justify-center shadow-md">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                             </div>
                             <h3 class="text-base font-bold text-slate-900">Deterministic Delay Engine</h3>
@@ -401,8 +394,8 @@
                             </p>
                         </div>
 
-                        <div class="p-6 rounded-2xl bg-sky-50/60 border border-sky-100 space-y-3 shadow-sm hover:border-sky-300 transition">
-                            <div class="w-12 h-12 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-md shadow-sky-500/25">
+                        <div class="p-6 rounded-2xl bg-[#f0f6fa] border border-sky-100/80 space-y-3 shadow-sm hover:border-slate-300 transition">
+                            <div class="w-12 h-12 rounded-2xl bg-[#284858] text-white flex items-center justify-center shadow-md">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
                             </div>
                             <h3 class="text-base font-bold text-slate-900">Live Open-Meteo Satellite Data</h3>
@@ -411,8 +404,8 @@
                             </p>
                         </div>
 
-                        <div class="p-6 rounded-2xl bg-sky-50/60 border border-sky-100 space-y-3 shadow-sm hover:border-sky-300 transition">
-                            <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/25">
+                        <div class="p-6 rounded-2xl bg-[#f0f6fa] border border-sky-100/80 space-y-3 shadow-sm hover:border-slate-300 transition">
+                            <div class="w-12 h-12 rounded-2xl bg-[#3c657a] text-white flex items-center justify-center shadow-md">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                             </div>
                             <h3 class="text-base font-bold text-slate-900">Role-Based Access Control</h3>
@@ -433,14 +426,14 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
                 
                 <!-- Quick Re-Search Header -->
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-sky-100">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-white/80">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
                             <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">Shipment Resi</span>
                             @php
                                 $statusBadge = match($shipment->status) {
                                     'DELIVERED' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                                    'IN_TRANSIT' => 'bg-sky-50 text-[#177be5] border-sky-200',
+                                    'IN_TRANSIT' => 'bg-sky-50 text-[#1e3c4f] border-sky-200',
                                     'EXCEPTION' => 'bg-rose-50 text-rose-700 border-rose-200',
                                     default => 'bg-slate-100 text-slate-700 border-slate-200',
                                 };
@@ -451,15 +444,15 @@
                     </div>
 
                     <div class="flex items-center gap-3 w-full md:w-auto">
-                        <a href="{{ route('track.index') }}" class="px-4 py-2.5 bg-sky-50 hover:bg-sky-100 text-[#177be5] border border-sky-200 font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-sm">
-                            <svg class="w-4 h-4 text-[#177be5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        <a href="{{ route('track.index') }}" class="px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200/80 font-bold rounded-2xl text-xs transition flex items-center gap-1.5 shadow-sm">
+                            <svg class="w-4 h-4 text-[#2c566e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                             <span>Back to 3D Globe</span>
                         </a>
 
                         <form action="{{ route('track.search') }}" method="POST" class="flex w-full md:w-auto gap-2">
                             @csrf
-                            <input type="text" name="tracking_number" placeholder="Track another ID..." required class="px-4 py-2.5 rounded-xl bg-sky-50/50 border border-sky-200 focus:bg-white focus:border-[#177be5] outline-none text-xs font-mono font-bold uppercase text-slate-800 w-full md:w-60">
-                            <button type="submit" class="px-5 py-2.5 bg-[#177be5] hover:bg-[#1366c0] text-white font-bold rounded-xl text-xs transition shadow-md shadow-sky-500/20">Search</button>
+                            <input type="text" name="tracking_number" placeholder="Track another ID..." required class="px-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#2c566e] outline-none text-xs font-mono font-bold uppercase text-slate-800 w-full md:w-60">
+                            <button type="submit" class="px-5 py-2.5 bg-[#132836] hover:bg-[#0c1a24] text-white font-bold rounded-2xl text-xs transition shadow-sm">Search</button>
                         </form>
                     </div>
                 </div>
@@ -467,9 +460,9 @@
                 <!-- ETA & Delay Status Alert Box -->
                 @if(isset($delayStatus))
                     @if($delayStatus['is_delayed'])
-                        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+                        <div class="bg-amber-50 border border-amber-200 rounded-3xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
                             <div class="flex items-start gap-3.5">
-                                <div class="p-2.5 bg-amber-100 text-amber-700 rounded-xl mt-0.5 border border-amber-200">
+                                <div class="p-2.5 bg-amber-100 text-amber-700 rounded-2xl mt-0.5 border border-amber-200">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
                                 <div>
@@ -480,14 +473,14 @@
                                     <p class="text-xs text-amber-800 mt-1">{{ $delayStatus['message'] }}</p>
                                 </div>
                             </div>
-                            <span class="text-[11px] font-mono font-semibold text-amber-800 bg-white px-3 py-1.5 rounded-lg border border-amber-200 shadow-sm">
+                            <span class="text-[11px] font-mono font-semibold text-amber-800 bg-white px-3 py-1.5 rounded-xl border border-amber-200 shadow-sm">
                                 Expected: {{ \Carbon\Carbon::parse($delayStatus['expected_arrival'])->format('d M Y, H:i') }}
                             </span>
                         </div>
                     @else
-                        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center justify-between shadow-sm">
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-4 flex items-center justify-between shadow-sm">
                             <div class="flex items-center gap-3">
-                                <div class="p-2 bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-200">
+                                <div class="p-2 bg-emerald-100 text-emerald-700 rounded-xl border border-emerald-200">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 </div>
                                 <div>
@@ -500,23 +493,23 @@
                 @endif
 
                 <!-- Horizontal Lifecycle Progress -->
-                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-sky-100">
+                <div class="bg-white/90 backdrop-blur-md p-6 sm:p-8 rounded-3xl shadow-sm border border-white/80">
                     <div class="flex justify-between items-center mb-6">
                         <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">Shipment Journey Progress</span>
-                        <span class="text-xs font-mono font-bold text-[#177be5]">{{ $shipment->progress_percent }}% Completed</span>
+                        <span class="text-xs font-mono font-bold text-[#1e3c4f]">{{ $shipment->progress_percent }}% Completed</span>
                     </div>
 
                     <div class="relative w-full max-w-4xl mx-auto my-6">
-                        <div class="w-full bg-sky-50 h-2.5 rounded-full overflow-hidden border border-sky-100">
-                            <div class="h-full bg-gradient-to-r from-sky-400 to-[#177be5] rounded-full transition-all duration-700" style="width: {{ $shipment->progress_percent }}%;"></div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200/60">
+                            <div class="h-full bg-gradient-to-r from-[#3c657a] to-[#132836] rounded-full transition-all duration-700" style="width: {{ $shipment->progress_percent }}%;"></div>
                         </div>
 
                         <div class="flex justify-between items-center text-[11px] font-mono font-bold text-slate-400 mt-3">
-                            <span class="{{ $shipment->progress_percent >= 10 ? 'text-[#177be5]' : '' }}">Created</span>
-                            <span class="{{ $shipment->progress_percent >= 30 ? 'text-[#177be5]' : '' }}">Booked</span>
-                            <span class="{{ $shipment->progress_percent >= 50 ? 'text-[#177be5]' : '' }}">Picked Up</span>
-                            <span class="{{ $shipment->progress_percent >= 75 ? 'text-[#177be5]' : '' }}">In Transit</span>
-                            <span class="{{ $shipment->progress_percent >= 100 ? 'text-emerald-600' : '' }}">Delivered</span>
+                            <span class="{{ $shipment->progress_percent >= 10 ? 'text-[#1e3c4f]' : '' }}">Created</span>
+                            <span class="{{ $shipment->progress_percent >= 30 ? 'text-[#1e3c4f]' : '' }}">Booked</span>
+                            <span class="{{ $shipment->progress_percent >= 50 ? 'text-[#1e3c4f]' : '' }}">Picked Up</span>
+                            <span class="{{ $shipment->progress_percent >= 75 ? 'text-[#1e3c4f]' : '' }}">In Transit</span>
+                            <span class="{{ $shipment->progress_percent >= 100 ? 'text-emerald-700' : '' }}">Delivered</span>
                         </div>
                     </div>
                 </div>
@@ -526,41 +519,41 @@
                     
                     <!-- Map Column (2/3 width) -->
                     <div class="lg:col-span-2 space-y-6">
-                        <div class="bg-white rounded-2xl shadow-sm border border-sky-100 overflow-hidden">
-                            <div class="p-4 border-b border-sky-100 bg-sky-50/50 flex justify-between items-center">
+                        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                            <div class="p-4 border-b border-slate-100 bg-[#f8fafc] flex justify-between items-center">
                                 <div>
                                     <h3 class="text-sm font-bold text-slate-900">Geographic Routing & Waypoints</h3>
                                     <p class="text-[11px] text-slate-500">Live coordinates plotted on OpenStreetMap.</p>
                                 </div>
-                                <span class="text-[10px] font-mono bg-sky-100 text-[#177be5] border border-sky-200 font-bold px-2 py-1 rounded">Leaflet OSM</span>
+                                <span class="text-[10px] font-mono bg-slate-100 text-[#1e3c4f] border border-slate-200 font-bold px-2.5 py-1 rounded-xl">Leaflet OSM</span>
                             </div>
                             <div id="map" class="w-full bg-slate-100" style="height: 480px; z-index: 1;"></div>
                         </div>
 
                         <!-- Chronological Tracking Timeline -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-sky-100 p-6">
+                        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
                             <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
                                 <div>
                                     <h3 class="text-base font-bold text-slate-900">Tracking Event Timeline</h3>
                                     <p class="text-xs text-slate-500">Immutable audit history of all recorded cargo scan events.</p>
                                 </div>
-                                <span class="text-xs font-mono font-semibold px-2.5 py-1 bg-sky-50 text-[#177be5] rounded-lg border border-sky-100">
+                                <span class="text-xs font-mono font-semibold px-2.5 py-1 bg-slate-100 text-[#1e3c4f] rounded-xl">
                                     {{ $shipment->chronologicalEvents->count() }} Milestones
                                 </span>
                             </div>
 
-                            <div class="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-sky-100">
+                            <div class="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
                                 @forelse($shipment->chronologicalEvents->reverse() as $event)
                                     @php
                                         $isEventException = $event->status === 'EXCEPTION';
-                                        $dotColor = $isEventException ? 'bg-rose-500 ring-rose-100' : ($event->status === 'DELIVERED' ? 'bg-emerald-500 ring-emerald-100' : 'bg-[#177be5] ring-sky-100');
+                                        $dotColor = $isEventException ? 'bg-rose-500 ring-rose-100' : ($event->status === 'DELIVERED' ? 'bg-emerald-500 ring-emerald-100' : 'bg-[#1e3c4f] ring-slate-100');
                                     @endphp
                                     <div class="relative">
                                         <div class="absolute -left-[27px] top-1.5 w-3.5 h-3.5 rounded-full {{ $dotColor }} ring-4 bg-white"></div>
-                                        <div class="bg-sky-50/40 p-4 rounded-xl border border-sky-100">
+                                        <div class="bg-[#f8fafc] p-4 rounded-2xl border border-slate-100">
                                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
                                                 <div class="flex items-center gap-2">
-                                                    <span class="text-xs font-mono font-black uppercase tracking-wider {{ $isEventException ? 'text-rose-600' : 'text-[#177be5]' }}">
+                                                    <span class="text-xs font-mono font-black uppercase tracking-wider {{ $isEventException ? 'text-rose-600' : 'text-[#1e3c4f]' }}">
                                                         {{ $event->status }}
                                                     </span>
                                                     @if($event->location)
@@ -584,21 +577,21 @@
                     <!-- Side Cards: Route, Cargo & Live Weather (1/3 width) -->
                     <div class="lg:col-span-1 space-y-6">
                         
-                        <!-- Live Weather Card (Open-Meteo in Sky Blue Gradient) -->
+                        <!-- Live Weather Card (Slate-Teal Gradient) -->
                         @if(isset($weather) && $weather['success'])
-                            <div class="bg-gradient-to-br from-[#177be5] to-sky-500 text-white p-6 rounded-2xl shadow-lg border border-sky-400/40 relative overflow-hidden">
+                            <div class="bg-gradient-to-br from-[#284858] to-[#16303d] text-white p-6 rounded-3xl shadow-lg border border-white/20 relative overflow-hidden">
                                 <div class="flex justify-between items-start mb-4">
                                     <div>
-                                        <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-sky-100">Live Weather Telemetry</span>
+                                        <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-sky-200">Live Weather Telemetry</span>
                                         <h4 class="text-base font-bold mt-0.5">Current Checkpoint</h4>
                                     </div>
                                     <span class="text-3xl">{{ $weather['icon'] }}</span>
                                 </div>
                                 <div class="flex items-baseline gap-2 mb-3">
                                     <span class="text-3xl font-black font-mono">{{ $weather['temperature'] }}°C</span>
-                                    <span class="text-xs text-sky-100 font-medium">{{ $weather['condition'] }}</span>
+                                    <span class="text-xs text-sky-200 font-medium">{{ $weather['condition'] }}</span>
                                 </div>
-                                <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-sky-100 pt-3 border-t border-white/20">
+                                <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-slate-300 pt-3 border-t border-white/20">
                                     <div>Wind: <b class="text-white">{{ $weather['windspeed'] }} km/h</b></div>
                                     <div class="text-right">Source: <b class="text-white">{{ $weather['source'] }}</b></div>
                                 </div>
@@ -606,7 +599,7 @@
                         @endif
 
                         <!-- Route Hubs Card -->
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-sky-100 space-y-4">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
                             <h4 class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">Route Schedule</h4>
                             <div>
                                 <p class="text-[10px] text-slate-400 font-mono font-bold uppercase">Origin Port / Hub</p>
@@ -621,7 +614,7 @@
                         </div>
 
                         <!-- Cargo Details Card -->
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-sky-100 space-y-3">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-3">
                             <h4 class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">Cargo Specifications</h4>
                             <div class="flex justify-between items-center text-xs">
                                 <span class="text-slate-500">Carrier Partner:</span>
@@ -637,7 +630,7 @@
                             </div>
                             <div class="flex justify-between items-center text-xs">
                                 <span class="text-slate-500">Expected Arrival:</span>
-                                <span class="font-mono font-bold text-[#177be5]">
+                                <span class="font-mono font-bold text-[#1e3c4f]">
                                     {{ $shipment->expected_arrival_at ? $shipment->expected_arrival_at->format('d M Y, H:i') : 'Pending' }}
                                 </span>
                             </div>
@@ -669,7 +662,7 @@
                     // Add Origin Marker
                     var originIcon = L.divIcon({
                         className: 'origin-marker',
-                        html: '<div style="background:#177be5; color:#fff; width:22px; height:22px; border-radius:50%; border:3px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:bold;">A</div>',
+                        html: '<div style="background:#132836; color:#fff; width:22px; height:22px; border-radius:50%; border:3px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:bold;">A</div>',
                         iconSize: [22, 22],
                         iconAnchor: [11, 11]
                     });
@@ -681,7 +674,7 @@
                         @if($ev->latitude && $ev->longitude)
                             waypoints.push([{{ $ev->latitude }}, {{ $ev->longitude }}]);
                             var isExc = '{{ $ev->status }}' === 'EXCEPTION';
-                            var cpColor = isExc ? '#f43f5e' : '#177be5';
+                            var cpColor = isExc ? '#f43f5e' : '#3c657a';
                             var cpIcon = L.divIcon({
                                 className: 'cp-marker',
                                 html: '<div style="background:'+cpColor+'; width:14px; height:14px; border-radius:50%; border:2px solid #fff; box-shadow:0 2px 4px rgba(0,0,0,0.3);"></div>',
@@ -706,7 +699,7 @@
 
                     // Draw Route Polyline
                     var polyline = L.polyline(waypoints, {
-                        color: '#177be5',
+                        color: '#284858',
                         weight: 4,
                         opacity: 0.9,
                         dashArray: '8, 8'
@@ -718,8 +711,8 @@
         @endif
     </main>
 
-    <!-- Footer: Clean Navy & White -->
-    <footer class="bg-slate-900 border-t border-slate-800 py-10 mt-auto text-slate-400">
+    <!-- Footer: Deep Midnight Slate -->
+    <footer class="bg-[#0b1622] border-t border-slate-800 py-10 mt-auto text-slate-400">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
             <p class="font-bold text-white text-sm">CargoTrace &bull; Global Shipment Visibility & Real-Time Tracking</p>
             <p>Web Programming 2 (UAS) &bull; Built with Laravel 12 &bull; Three.js WebGL &bull; Leaflet OSM &bull; Open-Meteo API</p>
@@ -786,52 +779,31 @@
                 const globeGroup = new THREE.Group();
                 scene.add(globeGroup);
 
-                // --- 2. Lighting: Balanced Daylight (No Intense Hotspot) ---
-                const ambientLight = new THREE.AmbientLight(0xffffff, 1.05);
+                // --- 2. Lighting: Elegant Frosted Metallic Shading ---
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
                 scene.add(ambientLight);
 
-                const sunLight = new THREE.DirectionalLight(0xffffff, 0.85);
-                sunLight.position.set(200, 200, 300);
-                scene.add(sunLight);
+                const keySun = new THREE.DirectionalLight(0xffffff, 1.1);
+                keySun.position.set(250, 280, 320);
+                scene.add(keySun);
 
-                const skyLight = new THREE.DirectionalLight(0x7dd3fc, 0.5);
-                skyLight.position.set(-200, -100, -200);
-                scene.add(skyLight);
+                const fillTeal = new THREE.DirectionalLight(0x94a3b8, 0.6);
+                fillTeal.position.set(-250, -100, -250);
+                scene.add(fillTeal);
 
-                // --- 3. Soft Ambient Orbit Particles ---
-                const starGeo = new THREE.BufferGeometry();
-                const starCount = 200;
-                const starPos = new Float32Array(starCount * 3);
-                for (let i = 0; i < starCount * 3; i += 3) {
-                    const r = 260 + Math.random() * 300;
-                    const theta = Math.random() * Math.PI * 2;
-                    const phi = Math.acos((Math.random() * 2) - 1);
-                    starPos[i] = r * Math.sin(phi) * Math.cos(theta);
-                    starPos[i+1] = r * Math.sin(phi) * Math.sin(theta);
-                    starPos[i+2] = r * Math.cos(phi);
-                }
-                starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-                const starMat = new THREE.PointsMaterial({
-                    color: 0xffffff,
-                    size: 1.8,
-                    transparent: true,
-                    opacity: 0.6
-                });
-                scene.add(new THREE.Points(starGeo, starMat));
-
-                // --- 4. Procedural Sky Blue & Cloud White Continents Texture ---
+                // --- 3. Procedural Silver-Slate Metallic Continents Texture ---
                 const globeRadius = 65;
                 const texCanvas = document.createElement('canvas');
                 texCanvas.width = 2048;
                 texCanvas.height = 1024;
                 const ctx = texCanvas.getContext('2d');
 
-                // Ocean: Luminous Azure Blue
-                ctx.fillStyle = '#0f5db8';
+                // Ocean: Matte Silver-Slate (matches mockup photo)
+                ctx.fillStyle = '#688394';
                 ctx.fillRect(0, 0, texCanvas.width, texCanvas.height);
 
-                // Subtle latitude and longitude lines
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                // Latitude and Longitude Grid Lines (Subtle White)
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
                 ctx.lineWidth = 1;
                 for (let lat = -80; lat <= 80; lat += 20) {
                     const y = ((90 - lat) / 180) * texCanvas.height;
@@ -909,10 +881,10 @@
                     ]
                 ];
 
-                // Continents: Crisp Cloud White with vibrant Sky Blue border
+                // Continents: Pure Porcelain White with clean edge relief
                 ctx.fillStyle = '#ffffff';
-                ctx.strokeStyle = '#38bdf8';
-                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 2.5;
 
                 continents.forEach(poly => {
                     ctx.beginPath();
@@ -926,15 +898,14 @@
                     ctx.stroke();
                 });
 
-                // Subtle cyan matrix dots over landmass
-                ctx.fillStyle = 'rgba(14, 165, 233, 0.45)';
-                for (let i = 0; i < 3200; i++) {
+                // Subtle matrix dots over landmass
+                ctx.fillStyle = 'rgba(100, 116, 139, 0.3)';
+                for (let i = 0; i < 3000; i++) {
                     const lat = (Math.random() * 140) - 60;
                     const lng = (Math.random() * 360) - 180;
                     const [x, y] = toCanvasCoords(lat, lng);
                     const pixel = ctx.getImageData(x, y, 1, 1).data;
-                    // If pixel is on white continent land
-                    if (pixel[0] > 200 && pixel[1] > 200 && pixel[2] > 200) {
+                    if (pixel[0] > 220 && pixel[1] > 220 && pixel[2] > 220) {
                         ctx.beginPath();
                         ctx.arc(x, y, 1.2, 0, Math.PI * 2);
                         ctx.fill();
@@ -943,28 +914,68 @@
 
                 const globeTexture = new THREE.CanvasTexture(texCanvas);
 
-                // Base Globe Sphere Mesh
+                // Base Globe Sphere Mesh (Smooth Metallic Pearl)
                 const globeGeo = new THREE.SphereGeometry(globeRadius, 64, 64);
                 const globeMat = new THREE.MeshPhongMaterial({
                     map: globeTexture,
-                    specular: 0x0284c7,
-                    shininess: 8,
+                    specular: 0x94a3b8,
+                    shininess: 24,
                     transparent: true,
                     opacity: 0.98
                 });
                 const globeMesh = new THREE.Mesh(globeGeo, globeMat);
                 globeGroup.add(globeMesh);
 
-                // --- 5. Atmospheric Outer Glow Sphere (Soft White & Sky Blue) ---
+                // --- 4. Atmospheric Outer Glow Sphere (Soft White) ---
                 const atmoGeo = new THREE.SphereGeometry(globeRadius * 1.025, 64, 64);
                 const atmoMat = new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     transparent: true,
-                    opacity: 0.16,
+                    opacity: 0.18,
                     side: THREE.BackSide,
                     blending: THREE.AdditiveBlending
                 });
                 globeGroup.add(new THREE.Mesh(atmoGeo, atmoMat));
+
+                // --- 5. Celestial Orbital Rings (Exact Feature from Mockup) ---
+                const orbitGroup = new THREE.Group();
+                const ringRadii = [globeRadius * 1.26, globeRadius * 1.34, globeRadius * 1.42];
+                const ringTilts = [
+                    { rx: 0.6, ry: 0.3, rz: 0.4 },
+                    { rx: -0.5, ry: 0.7, rz: -0.35 },
+                    { rx: 0.2, ry: -0.8, rz: 0.5 }
+                ];
+
+                ringTilts.forEach((tilt, idx) => {
+                    const rX = ringRadii[idx];
+                    const rY = ringRadii[idx] * 0.94;
+                    const ringCurve = new THREE.EllipseCurve(0, 0, rX, rY, 0, 2 * Math.PI, false, 0);
+                    const ringPoints = ringCurve.getPoints(90);
+                    const ringGeo = new THREE.BufferGeometry().setFromPoints(
+                        ringPoints.map(p => new THREE.Vector3(p.x, p.y, 0))
+                    );
+                    const ringMat = new THREE.LineBasicMaterial({
+                        color: 0xffffff,
+                        transparent: true,
+                        opacity: 0.5,
+                        linewidth: 1
+                    });
+                    const ringMesh = new THREE.Line(ringGeo, ringMat);
+                    ringMesh.rotation.set(tilt.rx, tilt.ry, tilt.rz);
+                    orbitGroup.add(ringMesh);
+
+                    // Glowing Satellite Beacon Nodes on the Ring
+                    [0.2, 0.65].forEach(t => {
+                        const pt = ringCurve.getPoint(t);
+                        const nodeGeo = new THREE.SphereGeometry(1.6, 12, 12);
+                        const nodeMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                        const nodeMesh = new THREE.Mesh(nodeGeo, nodeMat);
+                        const nodePos = new THREE.Vector3(pt.x, pt.y, 0).applyEuler(new THREE.Euler(tilt.rx, tilt.ry, tilt.rz));
+                        nodeMesh.position.copy(nodePos);
+                        orbitGroup.add(nodeMesh);
+                    });
+                });
+                globeGroup.add(orbitGroup);
 
                 // Helper: Lat/Lng to 3D Cartesian coordinates on sphere
                 function latLngToVector3(lat, lng, r) {
@@ -987,23 +998,15 @@
                 hubMap.forEach((hub) => {
                     const pos = latLngToVector3(hub.lat, hub.lng, globeRadius);
 
-                    // Beacon Dot: Pure Cloud White
-                    const dotGeo = new THREE.SphereGeometry(1.2, 16, 16);
+                    // Beacon Dot: Pure White Node
+                    const dotGeo = new THREE.SphereGeometry(1.4, 16, 16);
                     const dotMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
                     const dotMesh = new THREE.Mesh(dotGeo, dotMat);
                     dotMesh.position.copy(pos);
                     globeGroup.add(dotMesh);
 
-                    // Outward Beacon Cylinder: Sky Blue
-                    const cylGeo = new THREE.CylinderGeometry(0.3, 0.3, 3.2, 8);
-                    const cylMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
-                    const cylMesh = new THREE.Mesh(cylGeo, cylMat);
-                    cylMesh.position.copy(pos.clone().multiplyScalar(1.02));
-                    cylMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), pos.clone().normalize());
-                    globeGroup.add(cylMesh);
-
-                    // Pulsing Radar Ring: Cloud White
-                    const ringGeo = new THREE.RingGeometry(0.8, 1.6, 32);
+                    // Pulsing Radar Ring: White Ripple
+                    const ringGeo = new THREE.RingGeometry(0.8, 1.8, 32);
                     const ringMat = new THREE.MeshBasicMaterial({
                         color: 0xffffff,
                         side: THREE.DoubleSide,
@@ -1033,21 +1036,21 @@
 
                     // Midpoint for 3D curved arc
                     const midVec = originVec.clone().add(destVec).multiplyScalar(0.5);
-                    const arcHeight = globeRadius + Math.max(8, Math.min(32, distance * 0.22));
+                    const arcHeight = globeRadius + Math.max(8, Math.min(30, distance * 0.22));
                     const ctrlVec = midVec.clone().normalize().multiplyScalar(arcHeight);
 
                     const curve = new THREE.QuadraticBezierCurve3(originVec, ctrlVec, destVec);
                     arcCurves.push({ resi: route.resi, curve: curve, origin: route.origin, destination: route.destination });
 
-                    // Arc color by status: High contrast
-                    let arcColor = 0xffffff; // Pure Cloud White for IN_TRANSIT
-                    let pulseColor = 0x38bdf8; // Sky Blue pulse
+                    // Arc line color: Glowing Pure White
+                    let arcColor = 0xffffff;
+                    let pulseColor = 0xffffff;
                     if (route.status === 'EXCEPTION') {
-                        arcColor = 0xff3366; // Bright Rose
+                        arcColor = 0xf43f5e;
                         pulseColor = 0xff6699;
                     } else if (route.status === 'DELIVERED') {
-                        arcColor = 0x00e676; // Bright Emerald
-                        pulseColor = 0x69f0ae;
+                        arcColor = 0x10b981;
+                        pulseColor = 0x6ee7b7;
                     }
 
                     // Arc Line Mesh
@@ -1056,21 +1059,20 @@
                     const lineMat = new THREE.LineBasicMaterial({
                         color: arcColor,
                         transparent: true,
-                        opacity: 0.9,
+                        opacity: 0.85,
                         linewidth: 2
                     });
                     const lineMesh = new THREE.Line(lineGeo, lineMat);
                     globeGroup.add(lineMesh);
 
                     // Traveling pulse light packet
-                    const pGeo = new THREE.SphereGeometry(1.4, 12, 12);
+                    const pGeo = new THREE.SphereGeometry(1.6, 12, 12);
                     const pMat = new THREE.MeshBasicMaterial({
                         color: pulseColor,
                         transparent: true,
                         opacity: 0.95
                     });
                     const pMesh = new THREE.Mesh(pGeo, pMat);
-                    globeGroup.add(pMesh);
                     globeGroup.add(pMesh);
 
                     pulseParticles.push({
@@ -1083,7 +1085,7 @@
 
                 // Initial orientation: Center on Southeast Asia (Singapore / Indonesia trade corridors)
                 globeGroup.rotation.y = -1.2;
-                globeGroup.rotation.x = 0.25;
+                globeGroup.rotation.x = 0.2;
 
                 // --- 8. Smooth Mouse & Touch Interactivity ---
                 let isDragging = false;
@@ -1100,10 +1102,10 @@
                     if (rotateDot && rotateText) {
                         if (autoRotate) {
                             rotateDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
-                            rotateText.textContent = "Rotate: ON";
+                            rotateText.textContent = "Rotate : ON";
                         } else {
                             rotateDot.className = "w-2 h-2 rounded-full bg-slate-400";
-                            rotateText.textContent = "Rotate: OFF";
+                            rotateText.textContent = "Rotate : OFF";
                         }
                     }
                 }
@@ -1232,7 +1234,7 @@
 
                     // Auto-rotation
                     if (autoRotate && !isDragging) {
-                        globeGroup.rotation.y += 0.0018;
+                        globeGroup.rotation.y += 0.0016;
                     }
 
                     // Animate pulsing radar rings at ports
@@ -1268,7 +1270,7 @@
                 canvas.height = canvas.parentElement.clientHeight || 500;
                 
                 function drawRadar() {
-                    ctx.fillStyle = '#177be5';
+                    ctx.fillStyle = '#284858';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     const cx = canvas.width / 2;
                     const cy = canvas.height / 2;
