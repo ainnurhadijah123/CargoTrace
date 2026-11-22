@@ -7,7 +7,6 @@
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com)
 [![PHPUnit Tests](https://img.shields.io/badge/Tests-32%20Passed-success?style=for-the-badge&logo=phpunit&logoColor=white)](https://phpunit.de)
 
-> **Web Programming 2 — Final Project (UAS)**  
 > *A software portfolio project demonstrating enterprise software engineering, domain-driven service architecture, REST API design, external API integration, deterministic business logic, and automated testing.*
 
 ---
@@ -188,15 +187,6 @@ cp .env.example .env
 php artisan key:generate
 
 # 4. Database configuration (.env)
-# Default out-of-the-box uses SQLite:
-#   DB_CONNECTION=sqlite
-# For MySQL:
-#   DB_CONNECTION=mysql
-#   DB_HOST=127.0.0.1
-#   DB_PORT=3306
-#   DB_DATABASE=db_cargotrace
-#   DB_USERNAME=root
-#   DB_PASSWORD=
 
 # 5. Run migrations & realistic seeders
 php artisan migrate:fresh --seed
