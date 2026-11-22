@@ -150,8 +150,8 @@ CargoTrace is pre-configured with complete, realistic seed data specifically map
 | **Administrator** | `admin@gmail.com` | `admin123` | Control Tower Dashboard, Audit Logs, Master Data Management |
 | **Logistics Operator** | `operator@gmail.com` | `operator123` | Operational Dispatch, Tracking Milestones, Incident Filing & Resolution |
 | **Customer (Group A)** | `ain@gmail.com` | `ainnur123` | **Group A Scenario**: Southeast Asia &rarr; Europe (`CT-20261118-SEAEUR`), Threshold: 12h, Exception: `CUSTOMS_HOLD` (Open). Also owns `CT-20261118-DOMEST` & `CT-20261118-DAMAGED` |
-| **Customer (Group B)** | `budi@gmail.com` | `budi123` | **Group B Scenario**: Asia &rarr; North America (`CT-20261118-ASIANAM`), Threshold: 18h, Exception: `WEATHER_DELAY` (Delayed by 19h). Also owns `CT-20261118-BOOKED` & `CT-20261118-MISROUT` |
-| **Customer (Group C)** | `charlie@gmail.com` | `charlie123` | **Group C Scenario**: Southeast Asia &rarr; Australia (`CT-20261118-SEAAUS`), Threshold: 24h, Exception: `DOCUMENTATION_ISSUE` (Resolved, Delivered). Also owns `CT-20261118-PORTCON` |
+| **Customer (Group B)** | `fahmi@gmail.com` | `fahmi123` | **Group B Scenario**: Asia &rarr; North America (`CT-20261118-ASIANAM`), Threshold: 18h, Exception: `WEATHER_DELAY` (Delayed by 19h). Also owns `CT-20261118-BOOKED` & `CT-20261118-MISROUT` |
+| **Customer (Group C)** | `suhaila@gmail.com` | `suhaila123` | **Group C Scenario**: Southeast Asia &rarr; Australia (`CT-20261118-SEAAUS`), Threshold: 24h, Exception: `DOCUMENTATION_ISSUE` (Resolved, Delivered). Also owns `CT-20261118-PORTCON` |
 
 ### Detailed Seeded Shipment Scenarios
 

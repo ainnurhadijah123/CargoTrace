@@ -32,19 +32,31 @@ class MasterDataSeeder extends Seeder
             ['name' => 'Logistics Operator', 'password' => Hash::make('operator123'), 'role' => 'OPERATOR']
         );
 
-        $customer1 = User::firstOrCreate(
+        $customer1 = User::updateOrCreate(
             ['email' => 'ain@gmail.com'],
             ['name' => 'Ain Nurhadijah', 'password' => Hash::make('ainnur123'), 'role' => 'CUSTOMER']
         );
 
-        $customer2 = User::firstOrCreate(
-            ['email' => 'budi@gmail.com'],
-            ['name' => 'Budi Santoso', 'password' => Hash::make('budi123'), 'role' => 'CUSTOMER']
+        // Group B Scenario Customer: Fahmi Fadillah (replaces old dummy budi@gmail.com)
+        User::where('email', 'budi@gmail.com')->update([
+            'name' => 'Fahmi Fadillah',
+            'email' => 'fahmi@gmail.com',
+            'password' => Hash::make('fahmi123'),
+        ]);
+        $customer2 = User::updateOrCreate(
+            ['email' => 'fahmi@gmail.com'],
+            ['name' => 'Fahmi Fadillah', 'password' => Hash::make('fahmi123'), 'role' => 'CUSTOMER']
         );
 
-        $customer3 = User::firstOrCreate(
-            ['email' => 'charlie@gmail.com'],
-            ['name' => 'Charlie Henderson', 'password' => Hash::make('charlie123'), 'role' => 'CUSTOMER']
+        // Group C Scenario Customer: Suhaila Azmi (replaces old dummy charlie@gmail.com)
+        User::where('email', 'charlie@gmail.com')->update([
+            'name' => 'Suhaila Azmi',
+            'email' => 'suhaila@gmail.com',
+            'password' => Hash::make('suhaila123'),
+        ]);
+        $customer3 = User::updateOrCreate(
+            ['email' => 'suhaila@gmail.com'],
+            ['name' => 'Suhaila Azmi', 'password' => Hash::make('suhaila123'), 'role' => 'CUSTOMER']
         );
 
         // ---------------------------------------------------------------------

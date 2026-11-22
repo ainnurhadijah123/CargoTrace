@@ -142,10 +142,8 @@
                         </div>
 
                         <!-- Quick-Click Sample Shipments (Frosted Glass Pills) -->
-                        <!-- Quick Track Scenarios (Matching UAS Final Project Slide 23) -->
                         <div class="space-y-2">
                             <div class="flex items-center justify-between text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
-                                <span>SKENARIO UAS PER KELOMPOK (SLIDE 23)</span>
                                 <span class="text-slate-400 lowercase font-sans font-medium text-[11px]">Click to trace</span>
                             </div>
                             <div class="flex flex-wrap gap-2.5">
@@ -283,7 +281,6 @@
                         <div>
                             <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#2c566e]">Intercontinental Corridors</span>
                             <h2 class="text-3xl sm:text-4xl font-black text-[#0b1723] mt-1">Monitored Global Shipments</h2>
-                            <p class="text-sm text-slate-600 mt-1 max-w-xl">Live shipment pipelines configured in accordance with the Web Programming 2 final project specifications.</p>
                         </div>
                         <div class="mt-4 md:mt-0 flex items-center gap-2 text-xs font-mono font-bold text-[#1e3c4f] bg-white/80 px-3.5 py-1.5 rounded-2xl border border-white/90 shadow-sm">
                             <span>Showing {{ count($allShipments) }} Active Pipelines</span>

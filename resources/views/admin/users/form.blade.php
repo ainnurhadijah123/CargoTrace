@@ -27,7 +27,7 @@
                 <!-- Email -->
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Alamat Email <span class="text-red-500">*</span></label>
-                    <input type="email" name="email" value="{{ old('email', $user?->email) }}" required placeholder="Contoh: budi@email.com"
+                    <input type="email" name="email" value="{{ old('email', $user?->email) }}" required placeholder="Contoh: fahmi@gmail.com"
                         class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                     @error('email') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                 </div>

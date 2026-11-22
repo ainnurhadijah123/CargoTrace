@@ -106,9 +106,9 @@
                     <div class="h-px bg-slate-200 flex-grow"></div>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
-                    <button type="button" onclick="fillDemo('charlie@gmail.com', 'charlie123')" class="p-2.5 rounded-2xl bg-[#f0f5f9] hover:bg-white hover:border-[#2c566e] border border-slate-200 text-center transition group shadow-sm">
+                    <button type="button" onclick="fillDemo('fahmi@gmail.com', 'fahmi123')" class="p-2.5 rounded-2xl bg-[#f0f5f9] hover:bg-white hover:border-[#2c566e] border border-slate-200 text-center transition group shadow-sm">
                         <div class="text-[11px] font-mono font-black text-[#1e3c4f] uppercase">Customer</div>
-                        <div class="text-[10px] text-slate-400 truncate">charlie</div>
+                        <div class="text-[10px] text-slate-400 truncate">fahmi</div>
                     </button>
                     <button type="button" onclick="fillDemo('operator@gmail.com', 'operator123')" class="p-2.5 rounded-2xl bg-[#f0f5f9] hover:bg-white hover:border-[#2c566e] border border-slate-200 text-center transition group shadow-sm">
                         <div class="text-[11px] font-mono font-black text-[#2c566e] uppercase">Operator</div>
@@ -118,6 +118,12 @@
                         <div class="text-[11px] font-mono font-black text-slate-800 uppercase">Admin</div>
                         <div class="text-[10px] text-slate-400 truncate">admin</div>
                     </button>
+                </div>
+                <div class="mt-2 flex items-center justify-center gap-2 text-[10px] font-mono text-slate-400">
+                    <span>Pelanggan lain:</span>
+                    <button type="button" onclick="fillDemo('ain@gmail.com', 'ainnur123')" class="text-slate-500 hover:text-[#1e3c4f] hover:underline font-bold">Ain</button>
+                    <span>•</span>
+                    <button type="button" onclick="fillDemo('suhaila@gmail.com', 'suhaila123')" class="text-slate-500 hover:text-[#1e3c4f] hover:underline font-bold">Suhaila</button>
                 </div>
             </div>
             
