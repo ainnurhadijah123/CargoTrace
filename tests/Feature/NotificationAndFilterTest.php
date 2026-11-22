@@ -159,6 +159,14 @@ class NotificationAndFilterTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Panel Operasional Pengiriman');
 
+        // Operator access create shipment form with operator layout
+        $formResponse = $this->actingAs($this->operator)
+            ->get('/operator/shipments/create');
+        $formResponse->assertStatus(200);
+        $formResponse->assertSee('Logistics Operator');
+        $formResponse->assertSee('Kembali ke Dashboard');
+        $formResponse->assertDontSee('User Accounts');
+
         // Operator create shipment via web route
         $createResponse = $this->actingAs($this->operator)
             ->post('/operator/shipments', [

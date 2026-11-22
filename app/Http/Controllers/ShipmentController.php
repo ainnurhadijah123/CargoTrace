@@ -105,7 +105,13 @@ class ShipmentController extends Controller
 
     public function create()
     {
-        return view('admin.shipments.form', ['shipment' => null] + $this->formData());
+        $data = ['shipment' => null] + $this->formData();
+
+        if (auth()->check() && (is_object(auth()->user()->role) ? auth()->user()->role->value : auth()->user()->role) === 'OPERATOR') {
+            return view('operator.create_shipment', $data);
+        }
+
+        return view('admin.shipments.form', $data);
     }
 
     public function store(StoreShipmentRequest $request)
