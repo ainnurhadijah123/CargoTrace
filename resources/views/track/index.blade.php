@@ -210,7 +210,7 @@
                     </div>
 
                     <!-- Right 3D Interactive WebGL Globe Stage (7 cols) -->
-                    <div class="lg:col-span-7 relative h-[520px] sm:h-[620px] lg:h-[720px] w-full flex items-center justify-center">
+                    <div class="lg:col-span-7 relative h-[420px] sm:h-[500px] lg:h-[560px] w-full flex items-center justify-center overflow-hidden">
                         
                         <!-- 3D Canvas Container -->
                         <div id="globe-container" class="w-full h-full relative cursor-grab active:cursor-grabbing select-none">
@@ -761,10 +761,10 @@
                 // --- 1. Scene, Camera, Renderer ---
                 const scene = new THREE.Scene();
                 const width = container.clientWidth || 600;
-                const height = container.clientHeight || 600;
+                const height = container.clientHeight || 550;
                 
                 const camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
-                camera.position.set(0, 20, 270);
+                camera.position.set(0, 0, 310);
 
                 let renderer;
                 try {
@@ -786,16 +786,16 @@
                 const globeGroup = new THREE.Group();
                 scene.add(globeGroup);
 
-                // --- 2. Lighting: Bright Daylight Orbital Sun ---
-                const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
+                // --- 2. Lighting: Balanced Daylight (No Intense Hotspot) ---
+                const ambientLight = new THREE.AmbientLight(0xffffff, 1.05);
                 scene.add(ambientLight);
 
-                const sunLight = new THREE.DirectionalLight(0xffffff, 1.3);
-                sunLight.position.set(300, 250, 400);
+                const sunLight = new THREE.DirectionalLight(0xffffff, 0.85);
+                sunLight.position.set(200, 200, 300);
                 scene.add(sunLight);
 
-                const skyLight = new THREE.DirectionalLight(0x7dd3fc, 0.7);
-                skyLight.position.set(-300, -100, -300);
+                const skyLight = new THREE.DirectionalLight(0x7dd3fc, 0.5);
+                skyLight.position.set(-200, -100, -200);
                 scene.add(skyLight);
 
                 // --- 3. Soft Ambient Orbit Particles ---
@@ -803,7 +803,7 @@
                 const starCount = 200;
                 const starPos = new Float32Array(starCount * 3);
                 for (let i = 0; i < starCount * 3; i += 3) {
-                    const r = 320 + Math.random() * 350;
+                    const r = 260 + Math.random() * 300;
                     const theta = Math.random() * Math.PI * 2;
                     const phi = Math.acos((Math.random() * 2) - 1);
                     starPos[i] = r * Math.sin(phi) * Math.cos(theta);
@@ -813,14 +813,14 @@
                 starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
                 const starMat = new THREE.PointsMaterial({
                     color: 0xffffff,
-                    size: 2.0,
+                    size: 1.8,
                     transparent: true,
                     opacity: 0.6
                 });
                 scene.add(new THREE.Points(starGeo, starMat));
 
                 // --- 4. Procedural Sky Blue & Cloud White Continents Texture ---
-                const globeRadius = 90;
+                const globeRadius = 65;
                 const texCanvas = document.createElement('canvas');
                 texCanvas.width = 2048;
                 texCanvas.height = 1024;
@@ -947,8 +947,8 @@
                 const globeGeo = new THREE.SphereGeometry(globeRadius, 64, 64);
                 const globeMat = new THREE.MeshPhongMaterial({
                     map: globeTexture,
-                    specular: 0xbae6fd,
-                    shininess: 25,
+                    specular: 0x0284c7,
+                    shininess: 8,
                     transparent: true,
                     opacity: 0.98
                 });
@@ -956,11 +956,11 @@
                 globeGroup.add(globeMesh);
 
                 // --- 5. Atmospheric Outer Glow Sphere (Soft White & Sky Blue) ---
-                const atmoGeo = new THREE.SphereGeometry(globeRadius * 1.035, 64, 64);
+                const atmoGeo = new THREE.SphereGeometry(globeRadius * 1.025, 64, 64);
                 const atmoMat = new THREE.MeshBasicMaterial({
                     color: 0xffffff,
                     transparent: true,
-                    opacity: 0.22,
+                    opacity: 0.16,
                     side: THREE.BackSide,
                     blending: THREE.AdditiveBlending
                 });
@@ -988,14 +988,14 @@
                     const pos = latLngToVector3(hub.lat, hub.lng, globeRadius);
 
                     // Beacon Dot: Pure Cloud White
-                    const dotGeo = new THREE.SphereGeometry(1.6, 16, 16);
+                    const dotGeo = new THREE.SphereGeometry(1.2, 16, 16);
                     const dotMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
                     const dotMesh = new THREE.Mesh(dotGeo, dotMat);
                     dotMesh.position.copy(pos);
                     globeGroup.add(dotMesh);
 
                     // Outward Beacon Cylinder: Sky Blue
-                    const cylGeo = new THREE.CylinderGeometry(0.4, 0.4, 4.5, 8);
+                    const cylGeo = new THREE.CylinderGeometry(0.3, 0.3, 3.2, 8);
                     const cylMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
                     const cylMesh = new THREE.Mesh(cylGeo, cylMat);
                     cylMesh.position.copy(pos.clone().multiplyScalar(1.02));
@@ -1003,7 +1003,7 @@
                     globeGroup.add(cylMesh);
 
                     // Pulsing Radar Ring: Cloud White
-                    const ringGeo = new THREE.RingGeometry(1.2, 2.2, 32);
+                    const ringGeo = new THREE.RingGeometry(0.8, 1.6, 32);
                     const ringMat = new THREE.MeshBasicMaterial({
                         color: 0xffffff,
                         side: THREE.DoubleSide,
@@ -1033,7 +1033,7 @@
 
                     // Midpoint for 3D curved arc
                     const midVec = originVec.clone().add(destVec).multiplyScalar(0.5);
-                    const arcHeight = globeRadius + Math.max(14, Math.min(55, distance * 0.28));
+                    const arcHeight = globeRadius + Math.max(8, Math.min(32, distance * 0.22));
                     const ctrlVec = midVec.clone().normalize().multiplyScalar(arcHeight);
 
                     const curve = new THREE.QuadraticBezierCurve3(originVec, ctrlVec, destVec);
@@ -1063,13 +1063,14 @@
                     globeGroup.add(lineMesh);
 
                     // Traveling pulse light packet
-                    const pGeo = new THREE.SphereGeometry(1.8, 12, 12);
+                    const pGeo = new THREE.SphereGeometry(1.4, 12, 12);
                     const pMat = new THREE.MeshBasicMaterial({
                         color: pulseColor,
                         transparent: true,
                         opacity: 0.95
                     });
                     const pMesh = new THREE.Mesh(pGeo, pMat);
+                    globeGroup.add(pMesh);
                     globeGroup.add(pMesh);
 
                     pulseParticles.push({
@@ -1142,7 +1143,7 @@
                 // Wheel Zoom
                 container.addEventListener('wheel', (e) => {
                     e.preventDefault();
-                    camera.position.z = Math.max(160, Math.min(420, camera.position.z + e.deltaY * 0.25));
+                    camera.position.z = Math.max(180, Math.min(480, camera.position.z + e.deltaY * 0.25));
                 }, { passive: false });
 
                 // Touch Events
@@ -1177,18 +1178,18 @@
 
                 if (btnZoomIn) {
                     btnZoomIn.addEventListener('click', () => {
-                        camera.position.z = Math.max(160, camera.position.z - 35);
+                        camera.position.z = Math.max(180, camera.position.z - 30);
                     });
                 }
                 if (btnZoomOut) {
                     btnZoomOut.addEventListener('click', () => {
-                        camera.position.z = Math.min(420, camera.position.z + 35);
+                        camera.position.z = Math.min(480, camera.position.z + 30);
                     });
                 }
                 if (btnReset) {
                     btnReset.addEventListener('click', () => {
-                        camera.position.set(0, 20, 270);
-                        globeGroup.rotation.set(0.25, -1.2, 0);
+                        camera.position.set(0, 0, 310);
+                        globeGroup.rotation.set(0.2, -1.2, 0);
                         updateRotateState(true);
                     });
                 }
@@ -1207,7 +1208,7 @@
 
                     globeGroup.rotation.y = targetY;
                     globeGroup.rotation.x = targetX;
-                    camera.position.z = 240;
+                    camera.position.z = 250;
 
                     if (rotateTimeout) clearTimeout(rotateTimeout);
                     rotateTimeout = setTimeout(() => { updateRotateState(true); }, 6000);
