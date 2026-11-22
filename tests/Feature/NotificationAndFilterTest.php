@@ -179,4 +179,40 @@ class NotificationAndFilterTest extends TestCase
             'status' => 'CREATED',
         ]);
     }
+
+    public function test_operator_and_owner_can_access_print_label(): void
+    {
+        $shipment = Shipment::create([
+            'shipment_number' => 'CT-PRINT-001',
+            'customer_id' => $this->customer->id,
+            'carrier_id' => $this->carrier->id,
+            'origin_id' => $this->origin->id,
+            'destination_id' => $this->destination->id,
+            'created_by' => $this->operator->id,
+            'cargo_type' => 'Industrial Generator',
+            'weight_kg' => 3200,
+            'status' => 'IN_TRANSIT',
+        ]);
+
+        // Operator can access print label via /admin/shipments/{id}/print without 403
+        $operatorResponse = $this->actingAs($this->operator)
+            ->get("/admin/shipments/{$shipment->id}/print");
+        $operatorResponse->assertStatus(200);
+        $operatorResponse->assertSee('CT-PRINT-001');
+
+        // Owner customer can access print label
+        $customerResponse = $this->actingAs($this->customer)
+            ->get("/admin/shipments/{$shipment->id}/print");
+        $customerResponse->assertStatus(200);
+        $customerResponse->assertSee('CT-PRINT-001');
+
+        // Other customer cannot access
+        $otherCustomer = User::factory()->create([
+            'email' => 'other_cust@example.com',
+            'role' => 'CUSTOMER',
+        ]);
+        $unauthorizedResponse = $this->actingAs($otherCustomer)
+            ->get("/admin/shipments/{$shipment->id}/print");
+        $unauthorizedResponse->assertStatus(403);
+    }
 }

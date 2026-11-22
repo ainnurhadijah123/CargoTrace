@@ -60,6 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
 
+    // Print Shipment Resi (Accessible by Admin, Operator, and Authorized Customer)
+    Route::get('/shipments/{shipment}/print', [ShipmentController::class, 'print'])->name('shipments.print');
+    Route::get('/admin/shipments/{shipment}/print', [ShipmentController::class, 'print'])->name('admin.shipments.print');
+
     // Administrator Section
     Route::middleware(['role:ADMIN'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
@@ -70,7 +74,6 @@ Route::middleware('auth')->group(function () {
         
         Route::resource('carriers', CarrierController::class);
         Route::resource('shipments', ShipmentController::class);
-        Route::get('/shipments/{shipment}/print', [ShipmentController::class, 'print'])->name('shipments.print');
         Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit_logs.index');
         Route::resource('users', UserController::class);
     });

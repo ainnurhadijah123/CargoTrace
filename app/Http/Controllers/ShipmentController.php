@@ -177,8 +177,13 @@ class ShipmentController extends Controller
         ];
     }
 
-    public function print(Shipment $shipment)
+    public function print(Shipment $shipment, Request $request)
     {
+        $user = $request->user();
+        if ($user && $user->isCustomer() && $shipment->customer_id !== $user->id) {
+            abort(403, 'Akses Ditolak. Anda tidak memiliki izin untuk melihat dokumen ini.');
+        }
+
         $shipment->load(['origin', 'destination', 'carrier', 'customer', 'items']);
         return view('admin.shipments.print', compact('shipment'));
     }

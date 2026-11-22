@@ -5,7 +5,7 @@
 [![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com)
-[![PHPUnit Tests](https://img.shields.io/badge/Tests-30%20Passed-success?style=for-the-badge&logo=phpunit&logoColor=white)](https://phpunit.de)
+[![PHPUnit Tests](https://img.shields.io/badge/Tests-31%20Passed-success?style=for-the-badge&logo=phpunit&logoColor=white)](https://phpunit.de)
 
 > **Web Programming 2 — Final Project (UAS)**  
 > *A software portfolio project demonstrating enterprise software engineering, domain-driven service architecture, REST API design, external API integration, deterministic business logic, and automated testing.*
@@ -268,8 +268,10 @@ php artisan test
   ✓ invalid status transition is rejected
   ✓ cannot transition from terminal status delivered
 
-  Tests:    30 passed (86 assertions)
-  Duration: 5.12s
+  ✓ operator and owner can access print label
+
+  Tests:    31 passed (91 assertions)
+  Duration: 13.85s
 ```
 
 ---

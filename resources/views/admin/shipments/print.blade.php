@@ -20,7 +20,7 @@
     <div class="no-print p-4 bg-slate-800 text-center text-white">
         <p class="mb-3 text-sm">Pastikan pengaturan printer (ukuran kertas & margin) sudah sesuai.</p>
         <button onclick="window.print()" class="bg-indigo-500 hover:bg-indigo-600 px-6 py-2 rounded-lg font-bold">Cetak Sekarang</button>
-        <a href="{{ route('admin.shipments.index') }}" class="ml-4 text-slate-300 hover:text-white underline text-sm">Kembali</a>
+        <button onclick="window.close(); if(!window.closed){ history.back(); }" class="ml-4 text-slate-300 hover:text-white underline text-sm bg-transparent border-0 cursor-pointer">Kembali / Tutup</button>
     </div>
 
     <!-- Area Kertas Resi (A4/Letter) -->
