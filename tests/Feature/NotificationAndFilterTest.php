@@ -215,4 +215,14 @@ class NotificationAndFilterTest extends TestCase
             ->get("/admin/shipments/{$shipment->id}/print");
         $unauthorizedResponse->assertStatus(403);
     }
+
+    public function test_admin_can_access_admin_dashboard_without_errors(): void
+    {
+        $response = $this->actingAs($this->admin)
+            ->get('/admin/dashboard');
+
+        $response->assertStatus(200);
+        $response->assertSee('Global Shipment Visibility', false);
+        $response->assertSee('Maersk Test Line');
+    }
 }
