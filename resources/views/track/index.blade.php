@@ -408,122 +408,139 @@
 
                     </div>
 
-                    <!-- UAS Final Project: Skenario Unik Per Kelompok (Slide 23) -->
                     <div class="mt-14 pt-10 border-t border-slate-200/70">
-                        <div class="mb-6">
-                            <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#2c566e]">UAS • Final Project Specification</span>
-                            <h3 class="text-2xl font-black text-slate-900 mt-1">Skenario Unik Per Kelompok (Slide 23)</h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Konfigurasi skenario yang dibagikan secara terpisah agar hasil pengujian logistik tidak identik.</p>
+
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                            <div>
+                                <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#2c566e]">Configured Test Scenarios</span>
+                                <h3 class="text-xl font-black text-slate-900 mt-0.5">Skenario Operasional Kelompok (Slide 23)</h3>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs font-mono text-slate-500">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span>Ready for Live Evaluation</span>
+                            </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <!-- Group A Card -->
-                            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between">
-                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#2563eb]"></div>
+                            <div class="p-6 rounded-2xl bg-[#f0f6fa] border border-sky-100/80 space-y-3 shadow-sm hover:border-slate-300 transition flex flex-col justify-between">
                                 <div>
                                     <div class="flex items-center justify-between mb-3">
-                                        <h4 class="text-lg font-black text-slate-900">Group A</h4>
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200">ACTIVE</span>
+                                        <div class="w-12 h-12 rounded-2xl bg-[#132836] text-white flex items-center justify-center shadow-md">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                                        </div>
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-slate-700 border border-slate-200/80 shadow-xs">ACTIVE</span>
                                     </div>
-                                    <ul class="space-y-2 text-xs text-slate-700 font-medium mb-6">
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>Route:</strong> Southeast Asia → Europe</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>Delay threshold:</strong> 12 jam</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>Exception utama:</strong> customs hold</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>KPI:</strong> on-time delivery rate</span>
-                                        </li>
-                                    </ul>
+                                    <h4 class="text-base font-bold text-slate-900">Group A</h4>
+                                    <p class="text-xs text-slate-500 font-medium">Customer: Ain Nurhadijah</p>
+                                    
+                                    <div class="my-4 p-3.5 bg-white/80 rounded-xl border border-sky-100/80 space-y-2 text-xs">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Route:</span>
+                                            <span class="font-semibold text-slate-800">SE Asia → Europe</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Delay Threshold:</span>
+                                            <span class="font-mono font-bold text-slate-800">12 jam</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Exception Utama:</span>
+                                            <span class="font-semibold text-rose-600">Customs Hold</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Target KPI:</span>
+                                            <span class="font-semibold text-slate-800">On-time Delivery Rate</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <form action="{{ route('track.search') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="tracking_number" value="CT-20261118-SEAEUR">
-                                    <button type="submit" class="w-full py-2.5 px-4 bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 font-mono">
+                                    <button type="submit" class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
                                         <span>Lacak CT-20261118-SEAEUR</span>
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                     </button>
                                 </form>
                             </div>
 
                             <!-- Group B Card -->
-                            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between">
-                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#0d9488]"></div>
+                            <div class="p-6 rounded-2xl bg-[#f0f6fa] border border-sky-100/80 space-y-3 shadow-sm hover:border-slate-300 transition flex flex-col justify-between">
                                 <div>
                                     <div class="flex items-center justify-between mb-3">
-                                        <h4 class="text-lg font-black text-slate-900">Group B</h4>
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-teal-50 text-teal-700 border border-teal-200">ACTIVE</span>
+                                        <div class="w-12 h-12 rounded-2xl bg-[#284858] text-white flex items-center justify-center shadow-md">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                                        </div>
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-slate-700 border border-slate-200/80 shadow-xs">ACTIVE</span>
                                     </div>
-                                    <ul class="space-y-2 text-xs text-slate-700 font-medium mb-6">
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#0d9488] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>Route:</strong> Asia → North America</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#0d9488] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>Delay threshold:</strong> 18 jam</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#0d9488] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>Exception utama:</strong> weather delay</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#0d9488] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>KPI:</strong> average delay duration</span>
-                                        </li>
-                                    </ul>
+                                    <h4 class="text-base font-bold text-slate-900">Group B</h4>
+                                    <p class="text-xs text-slate-500 font-medium">Customer: Fahmi Fadillah</p>
+                                    
+                                    <div class="my-4 p-3.5 bg-white/80 rounded-xl border border-sky-100/80 space-y-2 text-xs">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Route:</span>
+                                            <span class="font-semibold text-slate-800">Asia → North America</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Delay Threshold:</span>
+                                            <span class="font-mono font-bold text-slate-800">18 jam</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Exception Utama:</span>
+                                            <span class="font-semibold text-rose-600">Weather Delay</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Target KPI:</span>
+                                            <span class="font-semibold text-slate-800">Average Delay Duration</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <form action="{{ route('track.search') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="tracking_number" value="CT-20261118-ASIANAM">
-                                    <button type="submit" class="w-full py-2.5 px-4 bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 font-mono">
+                                    <button type="submit" class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
                                         <span>Lacak CT-20261118-ASIANAM</span>
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                     </button>
                                 </form>
                             </div>
 
                             <!-- Group C Card -->
-                            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 relative overflow-hidden flex flex-col justify-between">
-                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#ea580c]"></div>
+                            <div class="p-6 rounded-2xl bg-[#f0f6fa] border border-sky-100/80 space-y-3 shadow-sm hover:border-slate-300 transition flex flex-col justify-between">
                                 <div>
                                     <div class="flex items-center justify-between mb-3">
-                                        <h4 class="text-lg font-black text-slate-900">Group C</h4>
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200">RESOLVED</span>
+                                        <div class="w-12 h-12 rounded-2xl bg-[#3c657a] text-white flex items-center justify-center shadow-md">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        </div>
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-emerald-700 border border-emerald-200 shadow-xs">RESOLVED</span>
                                     </div>
-                                    <ul class="space-y-2 text-xs text-slate-700 font-medium mb-6">
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>Route:</strong> Southeast Asia → Australia</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>Delay threshold:</strong> 24 jam</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>Exception utama:</strong> documentation issue</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-[#ea580c] mt-1.5 flex-shrink-0"></span>
-                                            <span><strong>KPI:</strong> exception resolution time</span>
-                                        </li>
-                                    </ul>
+                                    <h4 class="text-base font-bold text-slate-900">Group C</h4>
+                                    <p class="text-xs text-slate-500 font-medium">Customer: Suhaila Azmi</p>
+                                    
+                                    <div class="my-4 p-3.5 bg-white/80 rounded-xl border border-sky-100/80 space-y-2 text-xs">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Route:</span>
+                                            <span class="font-semibold text-slate-800">SE Asia → Australia</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Delay Threshold:</span>
+                                            <span class="font-mono font-bold text-slate-800">24 jam</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Exception Utama:</span>
+                                            <span class="font-semibold text-amber-700">Documentation Issue</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 font-medium">Target KPI:</span>
+                                            <span class="font-semibold text-slate-800">Exception Resolution Time</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <form action="{{ route('track.search') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="tracking_number" value="CT-20261118-SEAAUS">
-                                    <button type="submit" class="w-full py-2.5 px-4 bg-orange-50 hover:bg-orange-100 text-orange-800 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 font-mono">
+                                    <button type="submit" class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
                                         <span>Lacak CT-20261118-SEAAUS</span>
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                     </button>
                                 </form>
                             </div>
@@ -829,7 +846,6 @@
     <footer class="bg-[#0b1622] border-t border-slate-800 py-10 mt-auto text-slate-400">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
             <p class="font-bold text-white text-sm">CargoTrace &bull; Global Shipment Visibility & Real-Time Tracking</p>
-            <p>Web Programming 2 (UAS) &bull; Built with Laravel 12 &bull; Three.js WebGL &bull; Leaflet OSM &bull; Open-Meteo API</p>
             <p class="text-[11px] text-slate-500">Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" class="underline hover:text-white">OpenStreetMap</a> contributors &bull; Weather powered by <a href="https://open-meteo.com/" target="_blank" class="underline hover:text-white">Open-Meteo</a></p>
         </div>
     </footer>
