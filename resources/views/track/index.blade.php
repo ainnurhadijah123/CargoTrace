@@ -331,6 +331,10 @@
 
                                     <div class="space-y-1.5 text-xs text-slate-600">
                                         <div class="flex justify-between">
+                                            <span>Atas Nama:</span>
+                                            <span class="font-bold text-[#1e3c4f]">{{ $s->customer?->name ?? 'Direct Consignee' }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
                                             <span>Carrier:</span>
                                             <span class="font-bold text-slate-800">{{ $s->carrier?->name }}</span>
                                         </div>
@@ -339,8 +343,8 @@
                                             <span class="font-medium text-slate-700">{{ $s->cargo_type }}</span>
                                         </div>
                                         <div class="flex justify-between">
-                                            <span>Gross Weight:</span>
-                                            <span class="font-mono font-bold text-slate-800">{{ number_format($s->weight_kg, 0) }} kg</span>
+                                            <span>Biaya / Berat:</span>
+                                            <span class="font-mono font-bold text-slate-800">{{ $s->formatted_cost }} • {{ number_format($s->weight_kg, 0) }} kg</span>
                                         </div>
                                     </div>
                                 </div>
@@ -413,7 +417,6 @@
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
                             <div>
                                 <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#2c566e]">Configured Test Scenarios</span>
-                                <h3 class="text-xl font-black text-slate-900 mt-0.5">Skenario Operasional Kelompok (Slide 23)</h3>
                             </div>
                             <div class="flex items-center gap-2 text-xs font-mono text-slate-500">
                                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -571,7 +574,13 @@
                             @endphp
                             <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black border uppercase {{ $statusBadge }}">{{ $shipment->status }}</span>
                         </div>
-                        <h2 class="text-2xl font-black font-mono text-slate-900 tracking-tight">{{ $shipment->shipment_number }}</h2>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <h2 class="text-2xl font-black font-mono text-slate-900 tracking-tight">{{ $shipment->shipment_number }}</h2>
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f0f6fa] border border-sky-200/80 text-xs font-bold text-[#1e3c4f]">
+                                <svg class="w-3.5 h-3.5 text-[#2c566e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                <span>Atas Nama: <strong class="text-slate-900 font-extrabold">{{ $shipment->customer?->name ?? 'Direct Consignee' }}</strong></span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex items-center gap-3 w-full md:w-auto">
@@ -747,6 +756,13 @@
                         <!-- Cargo Details Card -->
                         <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-3">
                             <h4 class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">Cargo Specifications</h4>
+                            <div class="flex justify-between items-center text-xs pb-2 border-b border-slate-100">
+                                <span class="text-slate-500">Atas Nama (Customer):</span>
+                                <span class="font-bold text-[#1e3c4f] flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5 text-[#2c566e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    {{ $shipment->customer?->name ?? 'Direct Consignee' }}
+                                </span>
+                            </div>
                             <div class="flex justify-between items-center text-xs">
                                 <span class="text-slate-500">Carrier Partner:</span>
                                 <span class="font-bold text-slate-800">{{ $shipment->carrier?->name }} ({{ $shipment->carrier?->code }})</span>
@@ -763,6 +779,12 @@
                                 <span class="text-slate-500">Expected Arrival:</span>
                                 <span class="font-mono font-bold text-[#1e3c4f]">
                                     {{ $shipment->expected_arrival_at ? $shipment->expected_arrival_at->format('d M Y, H:i') : 'Pending' }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs pt-2 border-t border-slate-100">
+                                <span class="text-slate-500">Total Biaya Kirim:</span>
+                                <span class="font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">
+                                    {{ $shipment->formatted_cost }}
                                 </span>
                             </div>
                         </div>

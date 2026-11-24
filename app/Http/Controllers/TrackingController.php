@@ -13,7 +13,7 @@ class TrackingController extends Controller
     // Menampilkan landing page publik dengan 3D Globe & real-time telemetry
     public function index()
     {
-        $allShipments = Shipment::with(['origin', 'destination', 'carrier', 'trackingEvents.location'])
+        $allShipments = Shipment::with(['origin', 'destination', 'carrier', 'customer', 'trackingEvents.location'])
             ->latest()
             ->get();
 
@@ -56,7 +56,7 @@ class TrackingController extends Controller
                 ->withInput();
         }
 
-        $allShipments = Shipment::with(['origin', 'destination', 'carrier', 'trackingEvents.location'])
+        $allShipments = Shipment::with(['origin', 'destination', 'carrier', 'customer', 'trackingEvents.location'])
             ->latest()
             ->get();
 
