@@ -190,9 +190,11 @@ class DashboardController extends Controller
 
     public function editStatus($shipment_number, TrackingService $trackingService)
     {
-        $shipment = Shipment::where('shipment_number', $shipment_number)->firstOrFail();
+        $shipment = Shipment::with(['origin', 'destination', 'carrier', 'customer', 'trackingEvents.location'])
+            ->where('shipment_number', $shipment_number)
+            ->firstOrFail();
         $allowedStatuses = $trackingService->getNextPossibleStatuses($shipment);
-        $locations = Location::all();
+        $locations = Location::orderBy('name')->get();
 
         return view('operator.edit_status', compact('shipment', 'allowedStatuses', 'locations'));
     }
@@ -205,13 +207,16 @@ class DashboardController extends Controller
             'status' => 'required|string',
             'location_id' => 'nullable|exists:locations,id',
             'description' => 'nullable|string|max:500',
+            'exception_note' => 'nullable|string|max:500',
         ]);
+
+        $description = $request->description ?? $request->exception_note ?? ("Status updated to {$request->status} by operator " . Auth::user()->name);
 
         try {
             $trackingService->recordEvent($shipment, [
                 'status' => $request->status,
                 'location_id' => $request->location_id,
-                'description' => $request->description ?? "Status updated by operator " . Auth::user()->name,
+                'description' => $description,
             ], Auth::id());
 
             return redirect()->route('operator.shipments.show', $shipment_number)
