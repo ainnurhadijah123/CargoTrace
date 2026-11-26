@@ -139,4 +139,25 @@ class RestApiTest extends TestCase
                 ],
             ]);
     }
+
+    public function test_api_docs_restricted_to_admin(): void
+    {
+        // 1. Guest is redirected to login
+        $guestResponse = $this->get('/api-docs');
+        $guestResponse->assertRedirect('/login');
+
+        // 2. Customer gets 403 Forbidden
+        $customerResponse = $this->actingAs($this->customer)->get('/api-docs');
+        $customerResponse->assertStatus(403);
+
+        // 3. Operator gets 403 Forbidden
+        $operatorResponse = $this->actingAs($this->operator)->get('/api-docs');
+        $operatorResponse->assertStatus(403);
+
+        // 4. Admin gets 200 OK
+        $admin = User::factory()->create(['role' => 'ADMIN']);
+        $adminResponse = $this->actingAs($admin)->get('/api-docs');
+        $adminResponse->assertStatus(200);
+        $adminResponse->assertSee('REST API');
+    }
 }

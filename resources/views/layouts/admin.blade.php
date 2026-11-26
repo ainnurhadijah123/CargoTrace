@@ -58,6 +58,12 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     User Accounts
                 </a>
+
+                <div class="pt-4 pb-2 px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Developer & API</div>
+                <a href="{{ route('api.docs') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs {{ request()->routeIs('api.docs*') ? 'bg-indigo-600 text-white' : 'hover:bg-slate-800 text-slate-300' }} transition">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    <span>REST API Documentation</span>
+                </a>
             @endif
 
             <div class="pt-4 pb-2 px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Public View</div>

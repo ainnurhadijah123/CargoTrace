@@ -22,15 +22,6 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/track', [TrackingController::class, 'index'])->name('track.index');
 Route::post('/track', [TrackingController::class, 'search'])->name('track.search');
 
-// Interactive REST API Documentation Portal & Postman Collection Download
-Route::get('/api-docs', function () {
-    return view('api_docs');
-})->name('api.docs');
-
-Route::get('/api-docs/download-postman', function () {
-    return response()->download(base_path('docs/cargotrace_postman_collection.json'), 'cargotrace_postman_collection.json');
-})->name('api.docs.download');
-
 // Root route (Redirects authenticated users to role dashboard, or guest to tracking portal)
 Route::get('/', function () {
     if (Auth::check()) {
@@ -72,6 +63,17 @@ Route::middleware('auth')->group(function () {
     // Print Shipment Resi (Accessible by Admin, Operator, and Authorized Customer)
     Route::get('/shipments/{shipment}/print', [ShipmentController::class, 'print'])->name('shipments.print');
     Route::get('/admin/shipments/{shipment}/print', [ShipmentController::class, 'print'])->name('admin.shipments.print');
+
+    // Interactive REST API Documentation Portal & Postman Collection (Protected: Admin Only)
+    Route::middleware(['role:ADMIN'])->group(function () {
+        Route::get('/api-docs', function () {
+            return view('api_docs');
+        })->name('api.docs');
+
+        Route::get('/api-docs/download-postman', function () {
+            return response()->download(base_path('docs/cargotrace_postman_collection.json'), 'cargotrace_postman_collection.json');
+        })->name('api.docs.download');
+    });
 
     // Administrator Section
     Route::middleware(['role:ADMIN'])->prefix('admin')->name('admin.')->group(function () {

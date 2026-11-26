@@ -52,10 +52,6 @@
                 <a href="#platform-specs" class="hidden sm:inline-block text-xs font-bold text-slate-700 hover:text-[#0b1723] transition">
                     Specs & Architecture
                 </a>
-                <a href="{{ route('api.docs') }}" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-[#1e3c4f] hover:text-[#0b1723] bg-white/70 hover:bg-white px-3 py-1.5 rounded-full border border-white/90 shadow-sm transition">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>REST API Docs</span>
-                </a>
 
                 @auth
                     @php
@@ -66,6 +62,12 @@
                             default => route('customer.dashboard'),
                         };
                     @endphp
+                    @if($userRole === 'ADMIN')
+                        <a href="{{ route('api.docs') }}" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-[#1e3c4f] hover:text-[#0b1723] bg-white/70 hover:bg-white px-3 py-1.5 rounded-full border border-white/90 shadow-sm transition">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span>REST API Docs</span>
+                        </a>
+                    @endif
                     <div class="flex items-center gap-3">
                         <span class="hidden lg:inline-block text-xs font-mono font-bold text-slate-500 uppercase">
                             | {{ $userRole }}
