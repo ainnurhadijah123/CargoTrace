@@ -83,7 +83,6 @@ class TrackingPrivacyTest extends TestCase
 
         $response->assertRedirect(route('login', [
             'resi' => $this->shipmentAin->shipment_number,
-            'email' => $this->customerAin->email,
         ]));
         $response->assertSessionHas('warning');
     }

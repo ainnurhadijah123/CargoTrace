@@ -53,7 +53,6 @@
 
             @php
                 $intendedResi = request('resi') ?? session('intended_tracking_resi');
-                $intendedEmail = request('email');
             @endphp
 
             <!-- Protected Cargo Security Alert -->
@@ -89,7 +88,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
                         </div>
-                        <input type="email" id="email" name="email" value="{{ old('email', $intendedEmail) }}" required autofocus placeholder="nama@cargotrace.com"
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus placeholder="nama@cargotrace.com"
                             class="w-full pl-10 pr-4 py-3 bg-[#f0f5f9] hover:bg-[#e8f0f6] focus:bg-white border border-slate-200 focus:border-[#2c566e] focus:ring-4 focus:ring-[#2c566e]/10 rounded-2xl text-slate-800 text-sm font-medium transition placeholder:text-slate-400 focus:outline-none">
                     </div>
                 </div>
@@ -118,55 +117,6 @@
                     </button>
                 </div>
             </form>
-
-            <!-- Quick Demo Credentials Selector (Super Useful for Evaluation) -->
-            <div class="pt-4">
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="h-px bg-slate-200 flex-grow"></div>
-                    <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">Akun Demo Cepat</span>
-                    <div class="h-px bg-slate-200 flex-grow"></div>
-                </div>
-                
-                <!-- Customer Accounts -->
-                <div class="grid grid-cols-3 gap-2 mb-2">
-                    <button type="button" onclick="fillDemo('ain@gmail.com', 'ainnur123')" 
-                        class="p-2.5 rounded-2xl border text-center transition group shadow-sm {{ $intendedEmail === 'ain@gmail.com' ? 'bg-amber-50 border-amber-400 ring-2 ring-amber-300' : 'bg-[#f0f5f9] hover:bg-white border-slate-200' }}">
-                        <div class="text-[11px] font-mono font-black text-[#1e3c4f] uppercase">Ain</div>
-                        <div class="text-[10px] text-slate-500 truncate">Customer (A)</div>
-                        @if($intendedEmail === 'ain@gmail.com')
-                            <span class="mt-1 inline-block text-[9px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">Pemilik ✓</span>
-                        @endif
-                    </button>
-                    <button type="button" onclick="fillDemo('fahmi@gmail.com', 'fahmi123')" 
-                        class="p-2.5 rounded-2xl border text-center transition group shadow-sm {{ $intendedEmail === 'fahmi@gmail.com' ? 'bg-amber-50 border-amber-400 ring-2 ring-amber-300' : 'bg-[#f0f5f9] hover:bg-white border-slate-200' }}">
-                        <div class="text-[11px] font-mono font-black text-[#1e3c4f] uppercase">Fahmi</div>
-                        <div class="text-[10px] text-slate-500 truncate">Customer (B)</div>
-                        @if($intendedEmail === 'fahmi@gmail.com')
-                            <span class="mt-1 inline-block text-[9px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">Pemilik ✓</span>
-                        @endif
-                    </button>
-                    <button type="button" onclick="fillDemo('suhaila@gmail.com', 'suhaila123')" 
-                        class="p-2.5 rounded-2xl border text-center transition group shadow-sm {{ $intendedEmail === 'suhaila@gmail.com' ? 'bg-amber-50 border-amber-400 ring-2 ring-amber-300' : 'bg-[#f0f5f9] hover:bg-white border-slate-200' }}">
-                        <div class="text-[11px] font-mono font-black text-[#1e3c4f] uppercase">Suhaila</div>
-                        <div class="text-[10px] text-slate-500 truncate">Customer (C)</div>
-                        @if($intendedEmail === 'suhaila@gmail.com')
-                            <span class="mt-1 inline-block text-[9px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">Pemilik ✓</span>
-                        @endif
-                    </button>
-                </div>
-
-                <!-- Logistics Staff Accounts -->
-                <div class="grid grid-cols-2 gap-2">
-                    <button type="button" onclick="fillDemo('operator@gmail.com', 'operator123')" class="p-2.5 rounded-2xl bg-[#f0f5f9] hover:bg-white hover:border-[#2c566e] border border-slate-200 text-center transition group shadow-sm">
-                        <div class="text-[11px] font-mono font-black text-[#2c566e] uppercase">Operator</div>
-                        <div class="text-[10px] text-slate-500 truncate">Logistics Staff</div>
-                    </button>
-                    <button type="button" onclick="fillDemo('admin@gmail.com', 'admin123')" class="p-2.5 rounded-2xl bg-[#f0f5f9] hover:bg-white hover:border-[#2c566e] border border-slate-200 text-center transition group shadow-sm">
-                        <div class="text-[11px] font-mono font-black text-slate-800 uppercase">Admin</div>
-                        <div class="text-[10px] text-slate-500 truncate">System Admin</div>
-                    </button>
-                </div>
-            </div>
             
             <p class="mt-6 text-center text-xs text-slate-500 font-medium">
                 Belum punya akun? 
@@ -187,14 +137,6 @@
                 pwd.type = 'password';
                 icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
             }
-        }
-
-        function fillDemo(email, pwd) {
-            const emailInput = document.getElementById('email');
-            const pwdInput = document.getElementById('password');
-            emailInput.value = email;
-            pwdInput.value = pwd;
-            emailInput.focus();
         }
     </script>
 </body>

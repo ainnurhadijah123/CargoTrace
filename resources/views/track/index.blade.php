@@ -375,7 +375,7 @@
 
                                 <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                                     @guest
-                                        <a href="{{ route('login', ['resi' => $s->shipment_number, 'email' => $s->customer?->email]) }}" class="w-full py-2.5 px-4 bg-[#132836] hover:bg-[#0c1a24] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
+                                        <a href="{{ route('login', ['resi' => $s->shipment_number]) }}" class="w-full py-2.5 px-4 bg-[#132836] hover:bg-[#0c1a24] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
                                             <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                                             <span>Login & Lacak Resi</span>
                                             <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -539,7 +539,7 @@
                                 </div>
 
                                 @guest
-                                    <a href="{{ route('login', ['resi' => 'CT-20261118-SEAEUR', 'email' => $shipmentA?->customer?->email ?? 'ain@gmail.com']) }}" 
+                                    <a href="{{ route('login', ['resi' => 'CT-20261118-SEAEUR']) }}" 
                                         class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
                                         <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                                         <span>Login & Lacak Resi</span>
@@ -618,7 +618,7 @@
                                 </div>
 
                                 @guest
-                                    <a href="{{ route('login', ['resi' => 'CT-20261118-ASIANAM', 'email' => $shipmentB?->customer?->email ?? 'fahmi@gmail.com']) }}" 
+                                    <a href="{{ route('login', ['resi' => 'CT-20261118-ASIANAM']) }}" 
                                         class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
                                         <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                                         <span>Login & Lacak Resi</span>
@@ -697,7 +697,7 @@
                                 </div>
 
                                 @guest
-                                    <a href="{{ route('login', ['resi' => 'CT-20261118-SEAAUS', 'email' => $shipmentC?->customer?->email ?? 'suhaila@gmail.com']) }}" 
+                                    <a href="{{ route('login', ['resi' => 'CT-20261118-SEAAUS']) }}" 
                                         class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
                                         <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                                         <span>Login & Lacak Resi</span>

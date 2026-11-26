@@ -68,7 +68,6 @@ class TrackingController extends Controller
             session(['intended_tracking_resi' => $shipment->shipment_number]);
             return redirect()->route('login', [
                 'resi' => $shipment->shipment_number,
-                'email' => $shipment->customer?->email,
             ])->with('warning', "🔒 Akses Kargo Terlindungi: Silakan masuk ke akun pemilik pesanan ({$shipment->customer?->name}) atau staf logistik untuk melihat rincian pengiriman {$shipment->shipment_number}.");
         }
 
