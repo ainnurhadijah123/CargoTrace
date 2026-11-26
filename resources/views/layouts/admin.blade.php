@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin - CargoTrace')</title>
+    <title>@yield('title', 'Admin - GoTrace')</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
@@ -19,7 +19,7 @@
     <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl flex-shrink-0">
         <div class="p-6 border-b border-slate-800">
             <a href="{{ $dashRoute }}" class="font-black text-2xl tracking-tight text-white flex items-center gap-2">
-                CargoTrace<span class="text-{{ $accentColor }}-400">.</span>
+                GoTrace<span class="text-{{ $accentColor }}-400">.</span>
             </a>
             <span class="text-[11px] font-semibold text-slate-400 block mt-0.5">{{ $roleSubtitle }}</span>
         </div>
@@ -89,7 +89,7 @@
     <main class="flex-1 flex flex-col h-screen overflow-y-auto">
         <!-- Topbar -->
         <header class="bg-white shadow-sm border-b border-slate-200 px-8 py-4 flex justify-between items-center sticky top-0 z-30">
-            <h2 class="text-lg font-bold text-slate-800">@yield('header_title', 'CargoTrace')</h2>
+            <h2 class="text-lg font-bold text-slate-800">@yield('header_title', 'GoTrace')</h2>
             <div class="flex items-center gap-4">
                 <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold uppercase">
                     {{ is_object(auth()->user()->role) ? auth()->user()->role->value : auth()->user()->role }}

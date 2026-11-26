@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun - CargoTrace Global Visibility</title>
+    <title>Daftar Akun - GoTrace Global Visibility</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
 
     <!-- Authentic Frosted Ice & Slate Swirl Background (from Design Mockup) -->
     <div class="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
-        <img src="{{ asset('images/landing_hero_bg.jpg') }}" alt="CargoTrace Hero Background" class="w-full h-full object-cover object-center" />
+        <img src="{{ asset('images/landing_hero_bg.jpg') }}" alt="GoTrace Hero Background" class="w-full h-full object-cover object-center" />
     </div>
 
     <!-- Soft Ambient Frosted Veil -->
@@ -42,7 +42,7 @@
                     <span class="p-2 rounded-xl bg-[#0c1a24] text-white shadow-md">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                     </span>
-                    <span class="text-2xl sm:text-3xl font-black text-[#0b1723] tracking-tight">CargoTrace<span class="text-[#2c566e]">.</span></span>
+                    <span class="text-2xl sm:text-3xl font-black text-[#0b1723] tracking-tight">GoTrace<span class="text-[#2c566e]">.</span></span>
                 </div>
                 <p class="text-xs font-medium text-slate-500">Registrasi Akun Pelanggan Baru</p>
                 <div class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/70 border border-white/90 text-[10px] font-mono font-bold text-[#1e3c4f] shadow-sm">

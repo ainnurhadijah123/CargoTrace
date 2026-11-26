@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buat Pengiriman Baru - Operator Logistik CargoTrace</title>
+    <title>Buat Pengiriman Baru - Operator Logistik GoTrace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
     <nav class="bg-teal-700 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-30">
         <div class="flex items-center gap-3">
             <a href="{{ route('operator.dashboard') }}" class="font-black text-xl tracking-wide flex items-center gap-2">
-                CargoTrace<span class="text-teal-300">.</span>
+                GoTrace<span class="text-teal-300">.</span>
             </a>
             <span class="text-xs font-bold bg-teal-800 text-teal-200 px-2.5 py-1 rounded-lg uppercase tracking-wider">Logistics Operator</span>
         </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Status Resi {{ $shipment->shipment_number }} - Operator CargoTrace</title>
+    <title>Update Status Resi {{ $shipment->shipment_number }} - Operator GoTrace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
     <nav class="bg-teal-700 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-30">
         <div class="flex items-center gap-3">
             <a href="{{ route('operator.dashboard') }}" class="font-black text-xl tracking-wide flex items-center gap-2">
-                CargoTrace<span class="text-teal-300">.</span>
+                GoTrace<span class="text-teal-300">.</span>
             </a>
             <span class="text-xs font-bold bg-teal-800 text-teal-200 px-2.5 py-1 rounded-lg uppercase tracking-wider font-mono">Logistics Operator</span>
         </div>
@@ -247,7 +247,7 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400">
-        <p>CargoTrace Logistics Visibility Platform &bull; Operator Dispatch Terminal</p>
+        <p>GoTrace Logistics Visibility Platform &bull; Operator Dispatch Terminal</p>
     </footer>
 
 </body>

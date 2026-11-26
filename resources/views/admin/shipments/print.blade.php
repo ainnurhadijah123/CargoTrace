@@ -28,7 +28,7 @@
         <!-- Header Perusahaan -->
         <div class="flex justify-between items-start border-b-2 border-slate-800 pb-6 mb-6">
             <div>
-                <h1 class="text-3xl font-extrabold tracking-widest uppercase">CargoTrace</h1>
+                <h1 class="text-3xl font-extrabold tracking-widest uppercase">GoTrace</h1>
                 <p class="text-sm text-gray-500 mt-1">Sistem Pelacakan Kargo Digital</p>
             </div>
             <div class="text-right">

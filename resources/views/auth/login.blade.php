@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk - CargoTrace Global Visibility</title>
+    <title>Masuk - GoTrace Global Visibility</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
 
     <!-- Authentic Frosted Ice & Slate Swirl Background (from Design Mockup) -->
     <div class="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
-        <img src="{{ asset('images/landing_hero_bg.jpg') }}" alt="CargoTrace Hero Background" class="w-full h-full object-cover object-center" />
+        <img src="{{ asset('images/landing_hero_bg.jpg') }}" alt="GoTrace Hero Background" class="w-full h-full object-cover object-center" />
     </div>
 
     <!-- Soft Ambient Frosted Veil -->
@@ -42,7 +42,7 @@
                     <span class="p-2 rounded-xl bg-[#0c1a24] text-white shadow-md">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                     </span>
-                    <span class="text-2xl sm:text-3xl font-black text-[#0b1723] tracking-tight">CargoTrace<span class="text-[#2c566e]">.</span></span>
+                    <span class="text-2xl sm:text-3xl font-black text-[#0b1723] tracking-tight">GoTrace<span class="text-[#2c566e]">.</span></span>
                 </div>
                 <p class="text-xs font-medium text-slate-500">Global Logistics Visibility & Telemetry Management</p>
                 <div class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/70 border border-white/90 text-[10px] font-mono font-bold text-[#1e3c4f] shadow-sm">
@@ -88,7 +88,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
                         </div>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus placeholder="nama@cargotrace.com"
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus placeholder="nama@gotrace.com"
                             class="w-full pl-10 pr-4 py-3 bg-[#f0f5f9] hover:bg-[#e8f0f6] focus:bg-white border border-slate-200 focus:border-[#2c566e] focus:ring-4 focus:ring-[#2c566e]/10 rounded-2xl text-slate-800 text-sm font-medium transition placeholder:text-slate-400 focus:outline-none">
                     </div>
                 </div>

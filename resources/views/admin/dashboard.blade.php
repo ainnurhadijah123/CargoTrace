@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Dashboard Administrator')
-@section('header_title', 'CargoTrace Logistics Control Tower')
+@section('header_title', 'GoTrace Logistics Control Tower')
 
 @section('content')
     <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -212,7 +212,7 @@
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 18,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | CargoTrace'
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | GoTrace'
             }).addTo(map);
 
             var bounds = [];

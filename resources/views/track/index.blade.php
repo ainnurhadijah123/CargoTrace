@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CargoTrace - Global Shipment Visibility & Real-Time Tracking</title>
+    <title>GoTrace - Global Shipment Visibility & Real-Time Tracking</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -37,7 +37,7 @@
                     <span class="p-1.5 rounded-xl bg-[#0c1a24] text-white shadow-md group-hover:scale-105 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                     </span>
-                    <span>CargoTrace<span class="text-[#2c566e]">.</span></span>
+                    <span>GoTrace<span class="text-[#2c566e]">.</span></span>
                 </a>
                 <span class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold rounded-full bg-[#c8dde8] text-[#1e3c4f] border border-white/70 shadow-sm">
                     <span class="w-2 h-2 rounded-full bg-[#2a6d85] animate-ping"></span>
@@ -121,7 +121,7 @@
                 
                 <!-- Authentic Frosted Ice & Slate Swirl Background Image (from Design Mockup) -->
                 <div class="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
-                    <img src="{{ asset('images/landing_hero_bg.jpg') }}" alt="CargoTrace Hero Background" class="w-full h-full object-cover object-center" />
+                    <img src="{{ asset('images/landing_hero_bg.jpg') }}" alt="GoTrace Hero Background" class="w-full h-full object-cover object-center" />
                 </div>
 
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-grow">
@@ -995,7 +995,7 @@
 
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         maxZoom: 18,
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | CargoTrace'
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | GoTrace'
                     }).addTo(map);
 
                     var waypoints = [];
@@ -1056,7 +1056,7 @@
     <!-- Footer: Deep Midnight Slate -->
     <footer class="bg-[#0b1622] border-t border-slate-800 py-10 mt-auto text-slate-400">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
-            <p class="font-bold text-white text-sm">CargoTrace &bull; Global Shipment Visibility & Real-Time Tracking</p>
+            <p class="font-bold text-white text-sm">GoTrace &bull; Global Shipment Visibility & Real-Time Tracking</p>
             <p class="text-[11px] text-slate-500">Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" class="underline hover:text-white">OpenStreetMap</a> contributors &bull; Weather powered by <a href="https://open-meteo.com/" target="_blank" class="underline hover:text-white">Open-Meteo</a></p>
         </div>
     </footer>
@@ -1077,7 +1077,7 @@
                 }
             }
 
-            (function initCargoTraceGlobe() {
+            (function initGoTraceGlobe() {
                 const container = document.getElementById('globe-container');
                 const canvas = document.getElementById('globe-canvas');
                 if (!container || !canvas) return;
@@ -1507,7 +1507,7 @@
                     ctx.fillStyle = '#ffffff';
                     ctx.font = 'bold 14px monospace';
                     ctx.textAlign = 'center';
-                    ctx.fillText('CargoTrace Radar Telemetry Active', cx, cy - 20);
+                    ctx.fillText('GoTrace Radar Telemetry Active', cx, cy - 20);
                 }
                 drawRadar();
             }

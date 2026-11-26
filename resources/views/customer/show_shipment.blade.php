@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail & Timeline Resi {{ $shipment->shipment_number }} - CargoTrace</title>
+    <title>Detail & Timeline Resi {{ $shipment->shipment_number }} - GoTrace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -16,7 +16,7 @@
     <nav class="bg-indigo-600 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-30">
         <div class="flex items-center gap-3">
             <a href="{{ route('customer.dashboard') }}" class="font-black text-xl tracking-wide flex items-center gap-1.5">
-                CargoTrace<span class="text-indigo-300">.</span>
+                GoTrace<span class="text-indigo-300">.</span>
             </a>
             <span class="text-xs font-bold bg-indigo-700 text-indigo-100 px-2.5 py-1 rounded-lg uppercase tracking-wider">Customer Portal</span>
         </div>
@@ -283,7 +283,7 @@
     
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 p-4 text-center text-xs text-slate-500 mt-8">
-        &copy; {{ date('Y') }} CargoTrace &bull; Enterprise Global Shipment Visibility Platform
+        &copy; {{ date('Y') }} GoTrace &bull; Enterprise Global Shipment Visibility Platform
     </footer>
 
     <!-- Leaflet JS & Map Script -->

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REST API Documentation & Interactive Explorer — CargoTrace</title>
+    <title>REST API Documentation & Interactive Explorer — GoTrace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,8 +31,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="{{ route('track.index') }}" class="flex items-center gap-2 font-black text-xl tracking-tight text-[#0b1723] group">
-                    <span class="w-8 h-8 rounded-xl bg-[#0c1a24] text-white flex items-center justify-center font-mono font-bold text-sm shadow-md group-hover:scale-105 transition">CT</span>
-                    <span>CargoTrace<span class="text-[#2c566e]">.</span></span>
+                    <span class="w-8 h-8 rounded-xl bg-[#0c1a24] text-white flex items-center justify-center font-mono font-bold text-sm shadow-md group-hover:scale-105 transition">GT</span>
+                    <span>GoTrace<span class="text-[#2c566e]">.</span></span>
                 </a>
                 <span class="px-2.5 py-0.5 text-[10px] font-mono font-bold tracking-widest uppercase bg-[#2c566e]/10 text-[#2c566e] rounded-full border border-[#2c566e]/20">REST API v1</span>
             </div>
@@ -56,7 +56,7 @@
         <!-- Hero Header -->
         <div class="mb-8">
             <span class="text-xs font-mono font-bold uppercase tracking-widest text-[#2c566e]">Enterprise API Explorer</span>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0b1723] tracking-tight mt-1">CargoTrace REST API Documentation</h1>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0b1723] tracking-tight mt-1">GoTrace REST API Documentation</h1>
             <p class="text-sm text-slate-600 mt-2 max-w-2xl leading-relaxed">
                 Katalog dokumentasi endpoint RESTful lengkap yang mengimplementasikan autentikasi <strong>Laravel Sanctum Bearer Token</strong>, validasi server-side, relasi database 3NF, perhitungan deterministik SLA delay, serta integrasi cuaca maritim Open-Meteo.
             </p>
