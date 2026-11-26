@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Shipment;
 use App\Models\ShipmentException;
 use App\Services\EtaService;
@@ -11,8 +12,14 @@ use App\Services\External\WeatherService;
 class TrackingController extends Controller
 {
     // Menampilkan landing page publik dengan 3D Globe & real-time telemetry
-    public function index()
+    public function index(Request $request, EtaService $etaService, WeatherService $weatherService)
     {
+        // Support direct tracking lookup via GET ?resi=... (e.g. post-login redirect)
+        if ($request->filled('resi')) {
+            $request->merge(['tracking_number' => $request->resi]);
+            return $this->search($request, $etaService, $weatherService);
+        }
+
         $allShipments = Shipment::with(['origin', 'destination', 'carrier', 'customer', 'trackingEvents.location'])
             ->latest()
             ->get();
@@ -29,7 +36,7 @@ class TrackingController extends Controller
         return view('track.index', compact('stats', 'globeRoutes', 'allShipments'));
     }
 
-    // Memproses pencarian resi
+    // Memproses pencarian resi dengan RBAC protection
     public function search(Request $request, EtaService $etaService, WeatherService $weatherService)
     {
         $request->validate([
@@ -52,8 +59,27 @@ class TrackingController extends Controller
         ->first();
 
         if (!$shipment) {
-            return back()->with('error', "Shipment number '{$searchNumber}' not found. Please verify your tracking ID and try again.")
+            return back()->with('error', "Nomor resi '{$searchNumber}' tidak ditemukan. Silakan periksa kembali nomor resi Anda.")
                 ->withInput();
+        }
+
+        // 1. Autentikasi Pengguna: Tamu (Guest) harus login terlebih dahulu untuk melindungi privasi data kargo
+        if (!Auth::check()) {
+            session(['intended_tracking_resi' => $shipment->shipment_number]);
+            return redirect()->route('login', [
+                'resi' => $shipment->shipment_number,
+                'email' => $shipment->customer?->email,
+            ])->with('warning', "🔒 Akses Kargo Terlindungi: Silakan masuk ke akun pemilik pesanan ({$shipment->customer?->name}) atau staf logistik untuk melihat rincian pengiriman {$shipment->shipment_number}.");
+        }
+
+        // 2. Otorisasi Berbasis Peran (RBAC):
+        // - Pelanggan (CUSTOMER) HANYA boleh melihat kargo miliknya sendiri ($shipment->customer_id === Auth::id())
+        // - Operator & Administrator boleh melihat seluruh kargo untuk keperluan operasional & audit logistik
+        $user = Auth::user();
+        $userRole = is_object($user->role) ? $user->role->value : $user->role;
+
+        if ($userRole === 'CUSTOMER' && $shipment->customer_id !== $user->id) {
+            return redirect()->route('track.index')->with('error', "🔒 Akses Ditolak: Anda saat ini masuk sebagai {$user->name}. Pengiriman {$shipment->shipment_number} terdaftar atas nama pelanggan lain ({$shipment->customer?->name}). Demi privasi & kerahasiaan kargo, Anda hanya dapat melihat pesanan milik akun Anda sendiri.");
         }
 
         $allShipments = Shipment::with(['origin', 'destination', 'carrier', 'customer', 'trackingEvents.location'])

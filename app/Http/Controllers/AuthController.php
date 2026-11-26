@@ -6,13 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;               
+use App\Models\Shipment;
 use App\Enums\UserRole;
 
 class AuthController extends Controller
 {
     // Menampilkan form login
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
+        if ($request->filled('resi')) {
+            session(['intended_tracking_resi' => $request->resi]);
+        }
+
         return view('auth.login');
     }
 
@@ -27,7 +32,29 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            $role = Auth::user()->role;
+            $user = Auth::user();
+            $role = $user->role;
+            $userRoleVal = is_object($role) ? $role->value : $role;
+
+            $intendedResi = $request->input('intended_resi') ?: session('intended_tracking_resi');
+
+            if ($intendedResi) {
+                session()->forget('intended_tracking_resi');
+                $shipment = Shipment::with('customer')->where('shipment_number', $intendedResi)->first();
+
+                if ($shipment) {
+                    $isStaff = in_array($userRoleVal, ['ADMIN', 'OPERATOR']);
+                    $isOwner = ($shipment->customer_id === $user->id);
+
+                    if ($isStaff || $isOwner) {
+                        return redirect()->route('track.index', ['resi' => $shipment->shipment_number])
+                            ->with('success', "Selamat datang kembali, {$user->name}! Rincian kargo {$shipment->shipment_number} berhasil dibuka.");
+                    } else {
+                        return redirect()->route('customer.dashboard')
+                            ->with('warning', "🔒 Anda masuk sebagai {$user->name}. Pengiriman {$intendedResi} terdaftar atas nama pelanggan lain ({$shipment->customer?->name}), sehingga Anda dialihkan ke portal kargo Anda sendiri.");
+                    }
+                }
+            }
 
             // Redirect berdasarkan Enum UserRole ke rute dashboard masing-masing
             return match ($role) {

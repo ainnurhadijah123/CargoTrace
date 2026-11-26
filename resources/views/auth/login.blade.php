@@ -51,6 +51,24 @@
                 </div>
             </div>
 
+            @php
+                $intendedResi = request('resi') ?? session('intended_tracking_resi');
+                $intendedEmail = request('email');
+            @endphp
+
+            <!-- Protected Cargo Security Alert -->
+            @if($intendedResi || session('warning'))
+                <div class="mb-5 p-4 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs shadow-sm">
+                    <div class="flex items-center gap-2 font-bold text-amber-950 mb-1">
+                        <svg class="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        <span>Akses Kargo Terlindungi @if($intendedResi)• <span class="font-mono font-black text-amber-950">{{ $intendedResi }}</span>@endif</span>
+                    </div>
+                    <p class="text-amber-800 leading-relaxed">
+                        {{ session('warning') ?? 'Rincian kargo ini bersifat privat. Silakan masuk sebagai pemilik pesanan terkait atau staf logistik untuk melihat status dan spesifikasi pengiriman.' }}
+                    </p>
+                </div>
+            @endif
+
             <!-- Error Notification -->
             @if($errors->any())
                 <div class="mb-5 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-center gap-2.5 shadow-sm">
@@ -62,13 +80,16 @@
             <!-- Login Form -->
             <form action="{{ route('login.submit') }}" method="POST" class="space-y-4">
                 @csrf
+                @if($intendedResi)
+                    <input type="hidden" name="intended_resi" value="{{ $intendedResi }}">
+                @endif
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 font-mono">Alamat Email</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
                         </div>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus placeholder="nama@cargotrace.com"
+                        <input type="email" id="email" name="email" value="{{ old('email', $intendedEmail) }}" required autofocus placeholder="nama@cargotrace.com"
                             class="w-full pl-10 pr-4 py-3 bg-[#f0f5f9] hover:bg-[#e8f0f6] focus:bg-white border border-slate-200 focus:border-[#2c566e] focus:ring-4 focus:ring-[#2c566e]/10 rounded-2xl text-slate-800 text-sm font-medium transition placeholder:text-slate-400 focus:outline-none">
                     </div>
                 </div>
@@ -105,25 +126,45 @@
                     <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">Akun Demo Cepat</span>
                     <div class="h-px bg-slate-200 flex-grow"></div>
                 </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <button type="button" onclick="fillDemo('fahmi@gmail.com', 'fahmi123')" class="p-2.5 rounded-2xl bg-[#f0f5f9] hover:bg-white hover:border-[#2c566e] border border-slate-200 text-center transition group shadow-sm">
-                        <div class="text-[11px] font-mono font-black text-[#1e3c4f] uppercase">Customer</div>
-                        <div class="text-[10px] text-slate-400 truncate">fahmi</div>
+                
+                <!-- Customer Accounts -->
+                <div class="grid grid-cols-3 gap-2 mb-2">
+                    <button type="button" onclick="fillDemo('ain@gmail.com', 'ainnur123')" 
+                        class="p-2.5 rounded-2xl border text-center transition group shadow-sm {{ $intendedEmail === 'ain@gmail.com' ? 'bg-amber-50 border-amber-400 ring-2 ring-amber-300' : 'bg-[#f0f5f9] hover:bg-white border-slate-200' }}">
+                        <div class="text-[11px] font-mono font-black text-[#1e3c4f] uppercase">Ain</div>
+                        <div class="text-[10px] text-slate-500 truncate">Customer (A)</div>
+                        @if($intendedEmail === 'ain@gmail.com')
+                            <span class="mt-1 inline-block text-[9px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">Pemilik ✓</span>
+                        @endif
                     </button>
+                    <button type="button" onclick="fillDemo('fahmi@gmail.com', 'fahmi123')" 
+                        class="p-2.5 rounded-2xl border text-center transition group shadow-sm {{ $intendedEmail === 'fahmi@gmail.com' ? 'bg-amber-50 border-amber-400 ring-2 ring-amber-300' : 'bg-[#f0f5f9] hover:bg-white border-slate-200' }}">
+                        <div class="text-[11px] font-mono font-black text-[#1e3c4f] uppercase">Fahmi</div>
+                        <div class="text-[10px] text-slate-500 truncate">Customer (B)</div>
+                        @if($intendedEmail === 'fahmi@gmail.com')
+                            <span class="mt-1 inline-block text-[9px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">Pemilik ✓</span>
+                        @endif
+                    </button>
+                    <button type="button" onclick="fillDemo('suhaila@gmail.com', 'suhaila123')" 
+                        class="p-2.5 rounded-2xl border text-center transition group shadow-sm {{ $intendedEmail === 'suhaila@gmail.com' ? 'bg-amber-50 border-amber-400 ring-2 ring-amber-300' : 'bg-[#f0f5f9] hover:bg-white border-slate-200' }}">
+                        <div class="text-[11px] font-mono font-black text-[#1e3c4f] uppercase">Suhaila</div>
+                        <div class="text-[10px] text-slate-500 truncate">Customer (C)</div>
+                        @if($intendedEmail === 'suhaila@gmail.com')
+                            <span class="mt-1 inline-block text-[9px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">Pemilik ✓</span>
+                        @endif
+                    </button>
+                </div>
+
+                <!-- Logistics Staff Accounts -->
+                <div class="grid grid-cols-2 gap-2">
                     <button type="button" onclick="fillDemo('operator@gmail.com', 'operator123')" class="p-2.5 rounded-2xl bg-[#f0f5f9] hover:bg-white hover:border-[#2c566e] border border-slate-200 text-center transition group shadow-sm">
                         <div class="text-[11px] font-mono font-black text-[#2c566e] uppercase">Operator</div>
-                        <div class="text-[10px] text-slate-400 truncate">operator</div>
+                        <div class="text-[10px] text-slate-500 truncate">Logistics Staff</div>
                     </button>
                     <button type="button" onclick="fillDemo('admin@gmail.com', 'admin123')" class="p-2.5 rounded-2xl bg-[#f0f5f9] hover:bg-white hover:border-[#2c566e] border border-slate-200 text-center transition group shadow-sm">
                         <div class="text-[11px] font-mono font-black text-slate-800 uppercase">Admin</div>
-                        <div class="text-[10px] text-slate-400 truncate">admin</div>
+                        <div class="text-[10px] text-slate-500 truncate">System Admin</div>
                     </button>
-                </div>
-                <div class="mt-2 flex items-center justify-center gap-2 text-[10px] font-mono text-slate-400">
-                    <span>Pelanggan lain:</span>
-                    <button type="button" onclick="fillDemo('ain@gmail.com', 'ainnur123')" class="text-slate-500 hover:text-[#1e3c4f] hover:underline font-bold">Ain</button>
-                    <span>•</span>
-                    <button type="button" onclick="fillDemo('suhaila@gmail.com', 'suhaila123')" class="text-slate-500 hover:text-[#1e3c4f] hover:underline font-bold">Suhaila</button>
                 </div>
             </div>
             

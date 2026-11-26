@@ -87,6 +87,30 @@
     <!-- MAIN CONTENT -->
     <main class="flex-grow flex flex-col">
         
+        {{-- Flash Alerts (Success, Warning, Error) --}}
+        @if(session('error') || session('warning') || session('success'))
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 w-full z-20">
+                @if(session('error'))
+                    <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm font-semibold flex items-center gap-3 shadow-sm">
+                        <svg class="w-5 h-5 text-rose-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <span>{{ session('error') }}</span>
+                    </div>
+                @endif
+                @if(session('warning'))
+                    <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm font-semibold flex items-center gap-3 shadow-sm">
+                        <svg class="w-5 h-5 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <span>{{ session('warning') }}</span>
+                    </div>
+                @endif
+                @if(session('success'))
+                    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm font-semibold flex items-center gap-3 shadow-sm">
+                        <svg class="w-5 h-5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                @endif
+            </div>
+        @endif
+        
         @if(!isset($shipment))
             <!-- ======================================================== -->
             <!-- LIQUID ICE & SILVER-SLATE 3D GLOBE HERO EXPERIENCE       -->
@@ -350,14 +374,34 @@
                                 </div>
 
                                 <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                                    <form action="{{ route('track.search') }}" method="POST" class="w-full">
-                                        @csrf
-                                        <input type="hidden" name="tracking_number" value="{{ $s->shipment_number }}">
-                                        <button type="submit" class="w-full py-2.5 px-4 bg-[#132836] hover:bg-[#0c1a24] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm">
-                                            <span>Track Milestone Details</span>
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                        </button>
-                                    </form>
+                                    @guest
+                                        <a href="{{ route('login', ['resi' => $s->shipment_number, 'email' => $s->customer?->email]) }}" class="w-full py-2.5 px-4 bg-[#132836] hover:bg-[#0c1a24] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
+                                            <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                            <span>Login & Lacak Resi</span>
+                                            <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                        </a>
+                                    @else
+                                        @php
+                                            $currAuth = Auth::user();
+                                            $currRole = is_object($currAuth->role) ? $currAuth->role->value : $currAuth->role;
+                                            $canAccessS = in_array($currRole, ['ADMIN', 'OPERATOR']) || ($currAuth->id === $s->customer_id);
+                                        @endphp
+                                        @if($canAccessS)
+                                            <form action="{{ route('track.search') }}" method="POST" class="w-full">
+                                                @csrf
+                                                <input type="hidden" name="tracking_number" value="{{ $s->shipment_number }}">
+                                                <button type="submit" class="w-full py-2.5 px-4 bg-[#132836] hover:bg-[#0c1a24] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm">
+                                                    <span>Track Milestone Details</span>
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                                </button>
+                                            </form>
+                                        @else
+                                            <button type="button" disabled class="w-full py-2.5 px-3 bg-slate-200/90 text-slate-500 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-not-allowed font-mono">
+                                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                                <span>Privat (Bukan Pesanan Anda)</span>
+                                            </button>
+                                        @endif
+                                    @endguest
                                 </div>
                             </div>
                         @endforeach
@@ -424,6 +468,25 @@
                             </div>
                         </div>
 
+                        @php
+                            $shipmentA = $allShipments->firstWhere('shipment_number', 'CT-20261118-SEAEUR');
+                            $shipmentB = $allShipments->firstWhere('shipment_number', 'CT-20261118-ASIANAM');
+                            $shipmentC = $allShipments->firstWhere('shipment_number', 'CT-20261118-SEAAUS');
+
+                            $authUser = Auth::user();
+                            $authRole = $authUser ? (is_object($authUser->role) ? $authUser->role->value : $authUser->role) : null;
+                            $isStaff = in_array($authRole, ['ADMIN', 'OPERATOR']);
+
+                            $isOwnerA = $authUser && ($authUser->id === ($shipmentA?->customer_id ?? 0));
+                            $canViewA = $isStaff || $isOwnerA;
+
+                            $isOwnerB = $authUser && ($authUser->id === ($shipmentB?->customer_id ?? 0));
+                            $canViewB = $isStaff || $isOwnerB;
+
+                            $isOwnerC = $authUser && ($authUser->id === ($shipmentC?->customer_id ?? 0));
+                            $canViewC = $isStaff || $isOwnerC;
+                        @endphp
+
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <!-- Group A Card -->
                             <div class="p-6 rounded-2xl bg-[#f0f6fa] border border-sky-100/80 space-y-3 shadow-sm hover:border-slate-300 transition flex flex-col justify-between">
@@ -432,9 +495,27 @@
                                         <div class="w-12 h-12 rounded-2xl bg-[#132836] text-white flex items-center justify-center shadow-md">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
                                         </div>
-                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-slate-700 border border-slate-200/80 shadow-xs">ACTIVE</span>
+                                        @guest
+                                            <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-slate-700 border border-slate-200/80 shadow-xs">ACTIVE</span>
+                                        @else
+                                            @if($isOwnerA)
+                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                                                    <span>MILIK ANDA</span>
+                                                </span>
+                                            @elseif($isStaff)
+                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-sky-100 text-[#1e3c4f] border border-sky-300 shadow-xs flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-[#2a6d85]"></span>
+                                                    <span>STAF LOGISTIK</span>
+                                                </span>
+                                            @else
+                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-slate-200 text-slate-600 border border-slate-300 shadow-xs flex items-center gap-1">
+                                                    <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                                    <span>TERKUNCI</span>
+                                                </span>
+                                            @endif
+                                        @endguest
                                     </div>
-                                    <h4 class="text-base font-bold text-slate-900">Group A</h4>
                                     <p class="text-xs text-slate-500 font-medium">Customer: Ain Nurhadijah</p>
                                     
                                     <div class="my-4 p-3.5 bg-white/80 rounded-xl border border-sky-100/80 space-y-2 text-xs">
@@ -456,14 +537,34 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form action="{{ route('track.search') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="tracking_number" value="CT-20261118-SEAEUR">
-                                    <button type="submit" class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
-                                        <span>Lacak CT-20261118-SEAEUR</span>
-                                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                    </button>
-                                </form>
+
+                                @guest
+                                    <a href="{{ route('login', ['resi' => 'CT-20261118-SEAEUR', 'email' => $shipmentA?->customer?->email ?? 'ain@gmail.com']) }}" 
+                                        class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
+                                        <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                        <span>Login & Lacak Resi</span>
+                                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                    </a>
+                                @else
+                                    @if($canViewA)
+                                        <form action="{{ route('track.search') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="tracking_number" value="CT-20261118-SEAEUR">
+                                            <button type="submit" class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
+                                                <span>Lacak CT-20261118-SEAEUR</span>
+                                                <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <div class="space-y-1.5">
+                                            <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-200/90 text-slate-500 font-bold rounded-xl text-xs flex items-center justify-center gap-2 font-mono cursor-not-allowed">
+                                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                                <span>Privat (Bukan Pesanan Anda)</span>
+                                            </button>
+                                            <p class="text-[10px] text-center text-slate-500 font-medium">Hanya untuk Ain Nurhadijah atau staf.</p>
+                                        </div>
+                                    @endif
+                                @endguest
                             </div>
 
                             <!-- Group B Card -->
@@ -473,9 +574,27 @@
                                         <div class="w-12 h-12 rounded-2xl bg-[#284858] text-white flex items-center justify-center shadow-md">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
                                         </div>
-                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-slate-700 border border-slate-200/80 shadow-xs">ACTIVE</span>
+                                        @guest
+                                            <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-slate-700 border border-slate-200/80 shadow-xs">ACTIVE</span>
+                                        @else
+                                            @if($isOwnerB)
+                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                                                    <span>MILIK ANDA</span>
+                                                </span>
+                                            @elseif($isStaff)
+                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-sky-100 text-[#1e3c4f] border border-sky-300 shadow-xs flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-[#2a6d85]"></span>
+                                                    <span>STAF LOGISTIK</span>
+                                                </span>
+                                            @else
+                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-slate-200 text-slate-600 border border-slate-300 shadow-xs flex items-center gap-1">
+                                                    <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                                    <span>TERKUNCI</span>
+                                                </span>
+                                            @endif
+                                        @endguest
                                     </div>
-                                    <h4 class="text-base font-bold text-slate-900">Group B</h4>
                                     <p class="text-xs text-slate-500 font-medium">Customer: Fahmi Fadillah</p>
                                     
                                     <div class="my-4 p-3.5 bg-white/80 rounded-xl border border-sky-100/80 space-y-2 text-xs">
@@ -497,14 +616,34 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form action="{{ route('track.search') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="tracking_number" value="CT-20261118-ASIANAM">
-                                    <button type="submit" class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
-                                        <span>Lacak CT-20261118-ASIANAM</span>
-                                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                    </button>
-                                </form>
+
+                                @guest
+                                    <a href="{{ route('login', ['resi' => 'CT-20261118-ASIANAM', 'email' => $shipmentB?->customer?->email ?? 'fahmi@gmail.com']) }}" 
+                                        class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
+                                        <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                        <span>Login & Lacak Resi</span>
+                                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                    </a>
+                                @else
+                                    @if($canViewB)
+                                        <form action="{{ route('track.search') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="tracking_number" value="CT-20261118-ASIANAM">
+                                            <button type="submit" class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
+                                                <span>Lacak CT-20261118-ASIANAM</span>
+                                                <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <div class="space-y-1.5">
+                                            <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-200/90 text-slate-500 font-bold rounded-xl text-xs flex items-center justify-center gap-2 font-mono cursor-not-allowed">
+                                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                                <span>Privat (Bukan Pesanan Anda)</span>
+                                            </button>
+                                            <p class="text-[10px] text-center text-slate-500 font-medium">Hanya untuk Fahmi Fadillah atau staf.</p>
+                                        </div>
+                                    @endif
+                                @endguest
                             </div>
 
                             <!-- Group C Card -->
@@ -514,9 +653,27 @@
                                         <div class="w-12 h-12 rounded-2xl bg-[#3c657a] text-white flex items-center justify-center shadow-md">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                         </div>
-                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-emerald-700 border border-emerald-200 shadow-xs">RESOLVED</span>
+                                        @guest
+                                            <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white text-emerald-700 border border-emerald-200 shadow-xs">RESOLVED</span>
+                                        @else
+                                            @if($isOwnerC)
+                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                                                    <span>MILIK ANDA</span>
+                                                </span>
+                                            @elseif($isStaff)
+                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-sky-100 text-[#1e3c4f] border border-sky-300 shadow-xs flex items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-[#2a6d85]"></span>
+                                                    <span>STAF LOGISTIK</span>
+                                                </span>
+                                            @else
+                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-slate-200 text-slate-600 border border-slate-300 shadow-xs flex items-center gap-1">
+                                                    <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                                    <span>TERKUNCI</span>
+                                                </span>
+                                            @endif
+                                        @endguest
                                     </div>
-                                    <h4 class="text-base font-bold text-slate-900">Group C</h4>
                                     <p class="text-xs text-slate-500 font-medium">Customer: Suhaila Azmi</p>
                                     
                                     <div class="my-4 p-3.5 bg-white/80 rounded-xl border border-sky-100/80 space-y-2 text-xs">
@@ -538,14 +695,34 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form action="{{ route('track.search') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="tracking_number" value="CT-20261118-SEAAUS">
-                                    <button type="submit" class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
-                                        <span>Lacak CT-20261118-SEAAUS</span>
-                                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                    </button>
-                                </form>
+
+                                @guest
+                                    <a href="{{ route('login', ['resi' => 'CT-20261118-SEAAUS', 'email' => $shipmentC?->customer?->email ?? 'suhaila@gmail.com']) }}" 
+                                        class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
+                                        <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                        <span>Login & Lacak Resi</span>
+                                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                    </a>
+                                @else
+                                    @if($canViewC)
+                                        <form action="{{ route('track.search') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="tracking_number" value="CT-20261118-SEAAUS">
+                                            <button type="submit" class="w-full py-2.5 px-4 bg-[#0c1a24] hover:bg-[#1a3142] active:scale-[0.99] text-white font-bold rounded-xl text-xs transition duration-200 flex items-center justify-center gap-2 shadow-sm font-mono group">
+                                                <span>Lacak CT-20261118-SEAAUS</span>
+                                                <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <div class="space-y-1.5">
+                                            <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-200/90 text-slate-500 font-bold rounded-xl text-xs flex items-center justify-center gap-2 font-mono cursor-not-allowed">
+                                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                                <span>Privat (Bukan Pesanan Anda)</span>
+                                            </button>
+                                            <p class="text-[10px] text-center text-slate-500 font-medium">Hanya untuk Suhaila Azmi atau staf.</p>
+                                        </div>
+                                    @endif
+                                @endguest
                             </div>
                         </div>
                     </div>
@@ -580,6 +757,22 @@
                                 <svg class="w-3.5 h-3.5 text-[#2c566e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                 <span>Atas Nama: <strong class="text-slate-900 font-extrabold">{{ $shipment->customer?->name ?? 'Direct Consignee' }}</strong></span>
                             </div>
+                            @auth
+                                @php
+                                    $cRole = is_object(Auth::user()->role) ? Auth::user()->role->value : Auth::user()->role;
+                                @endphp
+                                @if(Auth::id() === $shipment->customer_id)
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+                                        <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                        <span>Pemilik Terverifikasi</span>
+                                    </span>
+                                @elseif(in_array($cRole, ['ADMIN', 'OPERATOR']))
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-[#1e3c4f] border border-sky-200 text-xs font-bold">
+                                        <svg class="w-3.5 h-3.5 text-[#2a6d85]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                        <span>Pengawas Logistik ({{ $cRole }})</span>
+                                    </span>
+                                @endif
+                            @endauth
                         </div>
                     </div>
 
