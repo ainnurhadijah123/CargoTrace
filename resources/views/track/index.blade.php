@@ -138,9 +138,6 @@
                             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-[#0b1723] tracking-tight uppercase leading-[1.05]">
                                 GLOBAL<br>VISIBILITY.
                             </h1>
-                            <p class="mt-4 text-slate-600 text-sm sm:text-base font-medium leading-relaxed max-w-lg">
-                                Real-time multimodal cargo visibility across intercontinental air, ocean, and ground freight. Track live coordinates, weather checkpoints, and automated ETA delay analytics.
-                            </p>
                         </div>
 
                         <!-- Tracking Search Box (Frosted Glassmorphism Card) -->
@@ -178,7 +175,6 @@
                                 <button type="button" onclick="quickFillTrack('CT-20261118-SEAEUR')" 
                                     class="group text-left px-3.5 py-2.5 rounded-2xl bg-white/75 hover:bg-white text-slate-800 border border-white/90 shadow-sm backdrop-blur transition hover:scale-[1.02]">
                                     <div class="flex items-center gap-1.5 mb-1">
-                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-blue-100 text-blue-800 border border-blue-200">GROUP A</span>
                                         <span class="text-[11px] font-mono font-bold text-[#1e3c4f]">CT-20261118-SEAEUR</span>
                                     </div>
                                     <span class="block text-[10px] text-slate-500 font-medium">SE Asia ➔ Europe • Customs Hold (12h)</span>
@@ -187,7 +183,6 @@
                                 <button type="button" onclick="quickFillTrack('CT-20261118-ASIANAM')" 
                                     class="group text-left px-3.5 py-2.5 rounded-2xl bg-white/75 hover:bg-white text-slate-800 border border-white/90 shadow-sm backdrop-blur transition hover:scale-[1.02]">
                                     <div class="flex items-center gap-1.5 mb-1">
-                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-teal-100 text-teal-800 border border-teal-200">GROUP B</span>
                                         <span class="text-[11px] font-mono font-bold text-rose-600">CT-20261118-ASIANAM</span>
                                     </div>
                                     <span class="block text-[10px] text-slate-500 font-medium">Asia ➔ North America • Weather Delay (18h)</span>
@@ -196,7 +191,6 @@
                                 <button type="button" onclick="quickFillTrack('CT-20261118-SEAAUS')" 
                                     class="group text-left px-3.5 py-2.5 rounded-2xl bg-white/75 hover:bg-white text-slate-800 border border-white/90 shadow-sm backdrop-blur transition hover:scale-[1.02]">
                                     <div class="flex items-center gap-1.5 mb-1">
-                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-amber-100 text-amber-800 border border-amber-200">GROUP C</span>
                                         <span class="text-[11px] font-mono font-bold text-emerald-700">CT-20261118-SEAAUS</span>
                                     </div>
                                     <span class="block text-[10px] text-slate-500 font-medium">SE Asia ➔ Australia • Doc Issue (24h)</span>
