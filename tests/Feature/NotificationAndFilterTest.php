@@ -208,11 +208,16 @@ class NotificationAndFilterTest extends TestCase
         $operatorResponse->assertStatus(200);
         $operatorResponse->assertSee('CT-PRINT-001');
 
-        // Owner customer can access print label
+        // Owner customer can access print label via ID or shipment number
         $customerResponse = $this->actingAs($this->customer)
             ->get("/admin/shipments/{$shipment->id}/print");
         $customerResponse->assertStatus(200);
         $customerResponse->assertSee('CT-PRINT-001');
+
+        $customerResiResponse = $this->actingAs($this->customer)
+            ->get("/shipments/{$shipment->shipment_number}/print");
+        $customerResiResponse->assertStatus(200);
+        $customerResiResponse->assertSee('CT-PRINT-001');
 
         // Other customer cannot access
         $otherCustomer = User::factory()->create([

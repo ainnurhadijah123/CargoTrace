@@ -183,14 +183,22 @@ class ShipmentController extends Controller
         ];
     }
 
-    public function print(Shipment $shipment, Request $request)
+    public function print($shipment, Request $request)
     {
+        if ($shipment instanceof Shipment) {
+            $model = $shipment;
+        } else {
+            $model = Shipment::where('shipment_number', $shipment)
+                ->orWhere('id', $shipment)
+                ->firstOrFail();
+        }
+
         $user = $request->user();
-        if ($user && $user->isCustomer() && $shipment->customer_id !== $user->id) {
+        if ($user && $user->isCustomer() && $model->customer_id !== $user->id) {
             abort(403, 'Akses Ditolak. Anda tidak memiliki izin untuk melihat dokumen ini.');
         }
 
-        $shipment->load(['origin', 'destination', 'carrier', 'customer', 'items']);
-        return view('admin.shipments.print', compact('shipment'));
+        $model->load(['origin', 'destination', 'carrier', 'customer', 'items']);
+        return view('admin.shipments.print', ['shipment' => $model]);
     }
 }
