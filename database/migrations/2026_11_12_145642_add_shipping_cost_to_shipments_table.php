@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('shipments', function (Blueprint $table) {
-            //
-        });
+        if (!Schema::hasColumn('shipments', 'shipping_cost')) {
+            Schema::table('shipments', function (Blueprint $table) {
+                $table->integer('shipping_cost')->default(0);
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('shipments', function (Blueprint $table) {
-            //
-        });
+        if (Schema::hasColumn('shipments', 'shipping_cost')) {
+            Schema::table('shipments', function (Blueprint $table) {
+                $table->dropColumn('shipping_cost');
+            });
+        }
     }
 };

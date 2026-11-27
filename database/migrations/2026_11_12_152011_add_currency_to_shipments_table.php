@@ -11,16 +11,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('shipments', function (Blueprint $table) {
-            // Menambahkan kolom currency (IDR / USD)
-            $table->string('currency', 3)->default('IDR')->after('shipping_cost');
-        });
+        if (!Schema::hasColumn('shipments', 'currency')) {
+            Schema::table('shipments', function (Blueprint $table) {
+                $table->string('currency', 3)->default('IDR');
+            });
+        }
     }
 
     public function down()
     {
-        Schema::table('shipments', function (Blueprint $table) {
-            $table->dropColumn('currency');
-        });
+        if (Schema::hasColumn('shipments', 'currency')) {
+            Schema::table('shipments', function (Blueprint $table) {
+                $table->dropColumn('currency');
+            });
+        }
     }
 };
