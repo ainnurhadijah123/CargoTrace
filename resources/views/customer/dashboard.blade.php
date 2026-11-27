@@ -227,9 +227,14 @@
                         @endif
                     </div>
 
-                    <a href="{{ route('customer.shipments.show', $shipment->shipment_number) }}" class="block text-center w-full bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white font-bold py-2.5 rounded-xl transition text-xs border border-indigo-200">
-                        Lihat Peta Rute & Timeline Lengkap &rarr;
-                    </a>
+                    <div class="flex items-center gap-2 mt-2">
+                        <a href="{{ route('customer.shipments.show', $shipment->shipment_number) }}" class="flex-1 text-center bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white font-bold py-2.5 rounded-xl transition text-xs border border-indigo-200">
+                            Lihat Peta Rute & Timeline &rarr;
+                        </a>
+                        <a href="{{ route('shipments.print', $shipment->shipment_number) }}" target="_blank" class="p-2.5 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 rounded-xl transition border border-slate-200 shadow-sm" title="Cetak Struk / Resi Pengiriman">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        </a>
+                    </div>
                 </div>
             @empty
                 <div class="col-span-full text-center py-12 text-slate-400 bg-white rounded-2xl border border-slate-200 border-dashed">
