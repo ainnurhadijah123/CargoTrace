@@ -5,25 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Pelanggan - GoTrace</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
-    <!-- Navbar -->
-    <nav class="bg-indigo-600 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-30">
+<body class="bg-[#f4f7fa] text-slate-800 flex flex-col min-h-screen selection:bg-indigo-600 selection:text-white">
+    <!-- Navbar Modern GoTrace -->
+    <nav class="bg-[#0c1a24] text-white px-4 sm:px-6 py-3.5 shadow-md flex justify-between items-center sticky top-0 z-30 border-b border-slate-800">
         <div class="flex items-center gap-3">
-            <a href="{{ route('customer.dashboard') }}" class="font-black text-xl tracking-wide flex items-center gap-1.5">
-                GoTrace<span class="text-indigo-300">.</span>
+            <a href="{{ route('customer.dashboard') }}" class="font-black text-xl tracking-wide flex items-center gap-1.5 group">
+                <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-mono font-bold text-xs shadow-md group-hover:scale-105 transition">GT</span>
+                <span class="text-white">GoTrace<span class="text-indigo-400">.</span></span>
             </a>
-            <span class="text-xs font-bold bg-indigo-700 text-indigo-100 px-2.5 py-1 rounded-lg uppercase tracking-wider">Customer Portal</span>
+            <span class="text-[10px] font-bold bg-slate-800 text-indigo-300 border border-slate-700/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider hidden sm:inline-block">Customer Portal</span>
         </div>
-        <div class="flex items-center gap-4">
-            <span class="text-xs font-medium text-indigo-100 hidden sm:inline">Halo, {{ auth()->user()->name }}</span>
-            <a href="{{ route('track.index') }}" target="_blank" class="text-xs font-semibold text-indigo-100 hover:text-white underline">
-                Lacak Resi Publik &nearr;
+        
+        <div class="flex items-center gap-3 sm:gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center justify-center text-xs font-bold">
+                    {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
+                </div>
+                <span class="text-xs font-semibold text-slate-300 hidden sm:inline">{{ auth()->user()->name }}</span>
+            </div>
+
+            <a href="{{ route('track.index') }}" target="_blank" class="text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-1 py-1.5 px-3 rounded-xl hover:bg-slate-800">
+                <span class="hidden md:inline">Lacak Resi Publik</span>
+                <span class="md:hidden">Publik</span>
+                <span class="text-indigo-400">&nearr;</span>
             </a>
+
             <form action="{{ route('logout') }}" method="POST" class="inline m-0">
                 @csrf
-                <button type="submit" class="bg-rose-500 hover:bg-rose-600 px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
-                    Logout
+                <button type="submit" class="bg-rose-600/80 hover:bg-rose-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    <span>Logout</span>
                 </button>
             </form>
         </div>
