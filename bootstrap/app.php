@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Percayai reverse proxy cloud (Railway, load balancer) agar mendeteksi protokol HTTPS
+        $middleware->trustProxies(at: '*');
+
         // Mendaftarkan alias middleware 'role'
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
